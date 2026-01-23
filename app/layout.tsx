@@ -30,8 +30,7 @@ export default function RootLayout({
         <main className="min-h-screen">{children}</main>
 
         {/* Footer Section */}
-        <footer className="bg-[#f7f3e7] text-[#FEFAE0] py-16 text-center">
-          <h2 className="text-2xl font-semibold">Footer</h2>
+        <footer className="bg-[#E6DAB5] text-[#000] py-10 text-center">
           <p className="mt-4 text-sm opacity-80">
             © 2026 Artisanal Refuge. All rights reserved.
           </p>
