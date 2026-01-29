@@ -1,0 +1,231 @@
+:root {
+  --page-bg: #dfe9df;
+  --cream: #f7f3e7;
+  --accent: #bc6c25;
+  --accent-dark: #a05b1f;
+  --text: #33302c;
+  --muted: #7b776f;
+}
+
+.pageBackground {
+  background: var(--cream);
+  min-height: 100vh;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.container {
+  width: 100%;
+  max-width: 1100px;
+}
+
+.card {
+  display: flex;
+  gap: 32px;
+
+  border-radius: 18px;
+  padding: 28px;
+}
+
+.left {
+  flex: 1.1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mainImage {
+  width: 100%;
+  max-width: 520px;
+  border-radius: 14px;
+  object-fit: cover;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+.right {
+  width: 360px;
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-size: 28px;
+  color: var(--text);
+  margin: 0 0 6px 0;
+  font-weight: 700;
+}
+
+.price {
+  color: var(--text);
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+.qtyRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.qtyLabel {
+  color: #6b6b66;
+}
+
+.qtyControls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.qtyBtn {
+  background: #f1f1ef;
+  border: 1px solid #e6e6e4;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.qtyInput {
+  width: 44px;
+  text-align: center;
+  border: 1px solid #e6e6e4;
+  height: 34px;
+  border-radius: 8px;
+}
+
+.addButton {
+  margin-top: 6px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(188, 108, 37, 0.18);
+}
+
+.creator {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid #f0ede7;
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+}
+
+.creatorBy,
+.dateGiver {
+  margin: 0;
+  color: #85837d;
+  font-size: 12px;
+}
+
+.creatorName,
+.opinionGiver {
+  margin: 0;
+  color: #85837d;
+  font-weight: 600;
+}
+
+.reviews {
+  margin-top: 18px;
+}
+
+.sectionTitle {
+  margin: 14px 0 8px 0;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.starsRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.stars {
+  color: #c96f4a;
+  font-weight: 700;
+}
+
+.reviewBars {
+  flex: 1;
+}
+
+.bar {
+  height: 8px;
+  background: linear-gradient(90deg, #c96f4a 60%, #eee 40%);
+  border-radius: 6px;
+}
+
+.descriptionSection {
+  margin-top: 24px;
+  background: transparent;
+}
+
+.subTitle {
+  font-size: 20px;
+  margin: 18px 0 8px 0;
+}
+
+.descriptionText {
+  color: #6b6b66;
+  line-height: 1.6;
+  max-width: 900px;
+}
+
+.gallery {
+  display: flex;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.gallery img {
+  width: 120px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.relatedGrid {
+  display: flex;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.relatedGrid img {
+  width: 190px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+@media (max-width: 860px) {
+  .card {
+    flex-direction: column;
+  }
+  .right {
+    width: 100%;
+  }
+  .mainImage {
+    max-width: 100%;
+  }
+  .relatedGrid img {
+    width: 100px;
+    height: 80px;
+  }
+}
