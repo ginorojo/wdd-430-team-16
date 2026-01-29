@@ -1,16 +1,9 @@
+import { Product } from '@/features/products/types';
 import Image from 'next/image';
 
-interface ProductCardProps {
-  data: {
-    title: string;
-    price: number;
-    author: string;
-    image: string;
-    authorImage: string;
-  }
-}
 
-export default function ProductCard({ data }: ProductCardProps) {
+
+export default function ProductCard({data}: {data: Product}) {
   return (
     <div className="bg-white rounded-xl p-3 shadow-sm hover:shadow-md transition-shadow duration-300">
       {/* Imagen Producto */}
