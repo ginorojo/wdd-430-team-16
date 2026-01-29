@@ -23,7 +23,7 @@ Follow these steps to set up the project locally.
 Clone the repository and install dependencies:
 
 ```bash
-git clone <https://github.com/ginorojo/wdd-430-team-16>
+git clone  [Repository](https://github.com/ginorojo/wdd-430-team-16)
 cd wdd-430-team-16 
 npm install
 3. Environment Configuration
