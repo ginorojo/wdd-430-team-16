@@ -4,7 +4,7 @@
  */
 
 import React from "react";
-import ArtisanCard from "./lib/ui/ArtisanCard";
+import ArtisanCard from "./ui/ArtisanCard";
 
 const HomePage = () => {
   return (
