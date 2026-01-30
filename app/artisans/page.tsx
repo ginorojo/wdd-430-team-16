@@ -7,6 +7,7 @@ const dmSans = DM_Sans({ subsets: ["latin"], weight: ["400", "500", "700"] });
 
 export default async function Home() {
   const products = await getProducts();
+  console.log(products);
   return (
     // Aplicamos el color de fondo crema directamente aquí: bg-[#F9F4EC]
     <main className={`min-h-screen bg-[#F9F4EC] ${dmSans.className}`}>
