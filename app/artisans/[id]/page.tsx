@@ -3,7 +3,6 @@
  * @description Home page component containing the hero banner, popular categories, and featured artisan listings.
  */
 
-import React from "react";
 import styles from "../../page-01.module.css"
 import { getProductById } from "@/features/products/queries";
 import { Product } from "@/features/products/types";
