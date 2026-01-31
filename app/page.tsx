@@ -5,8 +5,11 @@
 
 import React from "react";
 import ArtisanCard from "./ui/ArtisanCard";
+import { getBestSellers } from "@/features/sellers/queries";
+import Link from "next/link";
 
-const HomePage = () => {
+const HomePage = async () => {
+  const artisans = await getBestSellers();
   return (
     <div className="w-full">
       <section className="relative h-[500px] w-full flex items-center px-10 md:px-20 overflow-hidden">
@@ -69,33 +72,19 @@ const HomePage = () => {
             Popular artisans
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                name: "Alejandra",
-                specialty: "Ceramics",
-                banner: "alejandra_hero.jpg",
-                profile: "alejandra_profile.png",
-              },
-              {
-                name: "Maria",
-                specialty: "Textiles",
-                banner: "maria_hero.jpg",
-                profile: "maria_profile.png",
-              },
-              {
-                name: "Carlos",
-                specialty: "Woodworking",
-                banner: "carlos_hero.jpg",
-                profile: "carlos_profile.png",
-              },
-            ].map((artisan) => (
-              <ArtisanCard
-                key={artisan.name}
-                bannerSrc={`/images/${artisan.banner}`}
-                profileSrc={`/images/${artisan.profile}`}
-                name={artisan.name}
-                specialty={artisan.specialty}
-              />
+            {artisans.map((artisan) => (
+              <Link 
+                href={`/seller/${artisan.id}`} 
+                key={artisan.id}
+                className="transition-transform duration-300 hover:-translate-y-2"
+              >
+                <ArtisanCard
+                  bannerSrc={artisan.heroBanner}
+                  profileSrc={artisan.profileImage}
+                  name={artisan.name}
+                  specialty={artisan.category}
+                />
+              </Link>
             ))}
           </div>
         </div>
