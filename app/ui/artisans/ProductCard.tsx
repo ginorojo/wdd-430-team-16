@@ -27,9 +27,9 @@ export default function ProductCard({data}: {data: Product}) {
       >
         <div className="flex items-center gap-2 border-t border-gray-100 pt-3">
           <div className="relative w-6 h-6 rounded-full overflow-hidden">
-              <Image src={data.authorImage} alt={data.author} fill className="object-cover" />
+              <Image src={data.image} alt={data.title} fill className="object-cover" />
           </div>
-          <span className="text-xs text-gray-500 font-medium">{data.author}</span>
+          <span className="text-xs text-gray-500 font-medium">{data.category}</span>
         </div>
       </Link>
     </div>

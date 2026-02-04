@@ -4,11 +4,10 @@
  */
 
 import { getSellers } from "@/features/sellers/queries";
-import { PrismaClient } from "../../generated/prisma/client";
 import ArtisanCard from "../ui/ArtisanCard";
+
 import Link from "next/link";
 
-const prisma = new PrismaClient();
 
 export default async function SellersPage() {
   const artisans = await getSellers();
@@ -25,7 +24,7 @@ export default async function SellersPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
           {artisans.map((artisan) => (
               <Link 
-                href={`/sellers/${artisan.id}`} 
+                href={`/sellers/${artisan.id} `} 
                 key={artisan.id}
                 className="transition-transform duration-300 hover:-translate-y-2"
               >

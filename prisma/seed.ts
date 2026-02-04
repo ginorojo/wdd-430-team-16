@@ -137,8 +137,6 @@ async function main() {
           price: p.price,
           category: p.category,
           image: p.image,
-          author: assignedSeller.name, // Keeping the field for compatibility
-          authorImage: assignedSeller.profileImage, // Keeping the field for compatibility
           sellerId: assignedSeller.id, // Mandatory relational ID
         },
       });

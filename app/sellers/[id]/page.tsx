@@ -8,6 +8,7 @@ import { notFound } from "next/navigation";
 import ArtisanCard from "../../ui/ArtisanCard";
 import { getSellerWithProducts } from "@/features/sellers/queries";
 import NextLink from "next/link";
+import Image from "next/image";
 
 export default async function SellerProfilePage(props: {
   params: Promise<{ id: string }>;
@@ -24,9 +25,11 @@ export default async function SellerProfilePage(props: {
     <div className="min-h-screen bg-[#FEFAE0]">
       {/* Hero Banner Section */}
       <div className="relative h-64 md:h-80 w-full">
-        <img
+        <Image
           src={seller.heroBanner}
           alt={seller.name}
+          width={500}
+          height={400}
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-black/30" />
@@ -36,9 +39,11 @@ export default async function SellerProfilePage(props: {
       <div className="max-w-6xl mx-auto px-4">
         <div className="relative -mt-20 flex flex-col items-center md:items-start md:flex-row md:gap-8">
           <div className="w-40 h-40 rounded-full border-8 border-[#FEFAE0] overflow-hidden bg-gray-200 shadow-xl">
-            <img
+            <Image
               src={seller.profileImage}
               alt={seller.name}
+              width={500}
+              height={500}
               className="w-full h-full object-cover"
             />
           </div>
@@ -75,7 +80,9 @@ export default async function SellerProfilePage(props: {
                   className="bg-white rounded-xl overflow-hidden shadow-sm border border-[#DDA15E]/20 hover:shadow-md transition-shadow"
                 >
                   <div className="h-48 overflow-hidden">
-                    <img
+                    <Image
+                      width={500}
+                      height={500}
                       src={product.image}
                       alt={product.title}
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
