@@ -29,8 +29,8 @@ model Product {
   updatedAt   DateTime @updatedAt
 
   // Relationship to Seller
-  sellerId    String   @db.ObjectId
-  seller      Seller   @relation(fields: [sellerId], references: [id])
+  sellerId String @db.ObjectId
+  seller   Seller @relation(fields: [sellerId], references: [id])
 
   @@map("products") // This names the collection 'products' in MongoDB
 }
@@ -40,18 +40,111 @@ model Product {
  * Includes fields for the hero banner and profile photo as seen in the UI.
  */
 model Seller {
-  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  id           String  @id @default(auto()) @map("_id") @db.ObjectId
   name         String
-  bio          String?   // A short description of the artisan
-  profileImage String    // The circular profile photo
-  heroBanner   String    // The large banner image used in cards/profile
-  category     String    // e.g., "Cerámica", "Textiles"
-  
-  // Relations
-  products     Product[] // Link to the products this artisan creates
-  
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  bio          String? // A short description of the artisan
+  profileImage String // The circular profile photo
+  heroBanner   String // The large banner image used in cards/profile
+  category     String // e.g., "Cerámica", "Textiles"
 
-  @@map("sellers") 
+  // Relations
+  products Product[] // Link to the products this artisan creates
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("sellers")
+}
+
+// ... (Your existing generator, datasource, and Product model remain here) ...
+
+// =====================================================================
+// AUTHENTICATION MODELS (NextAuth.js v5 Adapter)
+// =====================================================================
+
+/**
+ * Represents a user in the system.
+ * Can be created via Credentials (email/password) or OAuth (Google, etc.).
+ */
+model User {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String? // Optional: Only required for Credentials login
+  role          Role      @default(USER) // RBAC: Role-Based Access Control
+
+  // Relations
+  accounts Account[]
+  sessions Session[]
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+/**
+ * Defines the user roles for authorization.
+ * BEST PRACTICE: Use Enums for strict typing in TypeScript.
+ */
+enum Role {
+  USER
+  ADMIN
+}
+
+/**
+ * Represents an OAuth account linked to a User.
+ * Example: A user's Google connection details.
+ * Managed automatically by NextAuth.
+ */
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.String
+  access_token      String? @db.String
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.String
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+/**
+ * Represents an active user session.
+ * Used for database-based session strategies.
+ */
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String   @db.ObjectId
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+/**
+ * Stores tokens for email verification and password resets.
+ * The strict composite unique constraint ensures security.
+ */
+model VerificationToken {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
 }

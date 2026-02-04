@@ -7,11 +7,11 @@ import React from "react";
 import ArtisanCard from "./ui/ArtisanCard";
 import { getBestSellers } from "@/features/sellers/queries";
 import Link from "next/link";
-
-const HomePage = async () => {
+const HomePage = async () => {  
   const artisans = await getBestSellers();
   return (
     <div className="w-full">
+
       <section className="relative h-[500px] w-full flex items-center px-10 md:px-20 overflow-hidden">
         {/* Background Image Container */}
         <div className="absolute inset-0 z-0">
