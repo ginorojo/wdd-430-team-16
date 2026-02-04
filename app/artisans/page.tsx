@@ -2,6 +2,7 @@ import { DM_Sans } from "next/font/google";
 import Sidebar from "../ui/artisans/Sidebar";
 import ProductCard from "../ui/artisans/ProductCard";
 import { getProducts } from '@/features/products/queries';
+import Link from "next/link";
 // Configuración de Fuente (asegúrate de que next/font esté funcionando)
 const dmSans = DM_Sans({ subsets: ["latin"], weight: ["400", "500", "700"] });
 
@@ -22,7 +23,10 @@ D
         <div className="flex-1">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {products.map((product) => (
+              <Link href={`/artisans/${product.id}`} key={product.id}>  
+
               <ProductCard key={product.id} data={product} />
+              </Link>
             ))}
           </div>
         </div>

@@ -23,12 +23,35 @@ model Product {
   title       String
   description String? // Added for more details
   price       Float
-  author      String
-  authorImage String
   category    String
   image       String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  // Relationship to Seller
+  sellerId    String   @db.ObjectId
+  seller      Seller   @relation(fields: [sellerId], references: [id])
+
   @@map("products") // This names the collection 'products' in MongoDB
+}
+
+/**
+ * Seller model mapping the frontend requirements for an artisan's profile.
+ * Includes fields for the hero banner and profile photo as seen in the UI.
+ */
+model Seller {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  bio          String?   // A short description of the artisan
+  profileImage String    // The circular profile photo
+  heroBanner   String    // The large banner image used in cards/profile
+  category     String    // e.g., "Cerámica", "Textiles"
+  
+  // Relations
+  products     Product[] // Link to the products this artisan creates
+  
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@map("sellers") 
 }

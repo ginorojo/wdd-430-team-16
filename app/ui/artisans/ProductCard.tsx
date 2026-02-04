@@ -1,7 +1,6 @@
 import { Product } from '@/features/products/types';
 import Image from 'next/image';
-
-
+import Link from "next/link";
 
 export default function ProductCard({data}: {data: Product}) {
   return (
@@ -21,12 +20,18 @@ export default function ProductCard({data}: {data: Product}) {
       <p className="font-bold text-[#1F1F1F] text-sm mb-3">${data.price.toFixed(2)}</p>
 
       {/* Info Autor */}
-      <div className="flex items-center gap-2 border-t border-gray-100 pt-3">
-        <div className="relative w-6 h-6 rounded-full overflow-hidden">
-             <Image src={data.authorImage} alt={data.author} fill className="object-cover" />
+      <Link 
+        href={`/sellers/${data.sellerId}`} 
+        key={data.sellerId}
+        className="transition-transform duration-300 hover:-translate-y-2"
+      >
+        <div className="flex items-center gap-2 border-t border-gray-100 pt-3">
+          <div className="relative w-6 h-6 rounded-full overflow-hidden">
+              <Image src={data.image} alt={data.title} fill className="object-cover" />
+          </div>
+          <span className="text-xs text-gray-500 font-medium">{data.category}</span>
         </div>
-        <span className="text-xs text-gray-500 font-medium">{data.author}</span>
-      </div>
+      </Link>
     </div>
   );
 }

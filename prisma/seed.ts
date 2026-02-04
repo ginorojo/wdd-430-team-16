@@ -8,106 +8,142 @@ const initialProducts = [
   {
     title: "Jarrón Terra Minimalista",
     price: 45.0,
-    author: "Aleiana Cormeltin",
     category: "Cerámica",
-    // Jarrón de cerámica tonos tierra
     image: "/marketplace/adorno.png",
-    authorImage: "https://randomuser.me/api/portraits/women/44.jpg",
   },
   {
     title: "Vasija de Arcilla Blanca",
     price: 35.0,
-    author: "Matura Gomel",
     category: "Cerámica",
-    // Cerámica blanca texturizada
-    image: "/marketplace/tazas.png ",
-    authorImage: "https://randomuser.me/api/portraits/women/68.jpg",
+    image: "/marketplace/tazas.png",
   },
-
-  // --- MADERA (Woodworking) ---
   {
-    
-    title: "tabla de picar",
+    title: "Tabla de picar",
     price: 25.0,
-    author: "Elsho Sandra",
     category: "Madera",
-    // Cucharas de madera rústica
     image: "/marketplace/tabla.png",
-    authorImage: "https://randomuser.me/api/portraits/men/32.jpg",
   },
   {
-    
     title: "Banco de madera",
     price: 40.0,
-    author: "Davio Rossi",
     category: "Madera",
-    // Cuencos apilados de madera
     image: "/marketplace/banco.png",
-    authorImage: "https://randomuser.me/api/portraits/men/45.jpg",
   },
-
-  // --- TEXTILES (Textiles) ---
   {
-    
     title: "Manta Tejige",
     price: 80.0,
-    author: "Sara Jenkins",
     category: "Textiles",
-    // Manta de lana doblada
     image: "/marketplace/manta2.png",
-    authorImage: "https://randomuser.me/api/portraits/women/90.jpg",
   },
   {
-    
     title: "Manteles de Lino Crudo",
     price: 30.0,
-    author: "Ana Silva",
     category: "Textiles",
-    // Telas naturales
     image: "/marketplace/manta.png",
-    authorImage: "https://randomuser.me/api/portraits/women/22.jpg",
   },
-
-  // --- JOYERÍA (Jewelry) ---
   {
-    
     title: "Collar Colgante Oro",
     price: 110.0,
-    author: "Elena Joyas",
     category: "Joyería",
-    // Joyería dorada minimalista
     image: "/marketplace/collar.png",
-    authorImage: "https://randomuser.me/api/portraits/women/33.jpg",
   },
   {
-    
     title: "Anillos Artesanales",
     price: 65.0,
-    author: "Marco Polo",
     category: "Joyería",
-    // Anillos sobre tela
     image: "/marketplace/anillo.png",
-    authorImage: "https://randomuser.me/api/portraits/men/11.jpg",
   },
-  // ... añade aquí el resto de tus objetos
+];
+
+const initialSellers = [
+  {
+    name: "Alejandra Carmelín",
+    bio: "Especialista en cerámica artesanal con técnicas ancestrales de horneado.",
+    profileImage: "/images/alejandra_profile.png",
+    heroBanner: "/images/alejandra_hero.jpg",
+    category: "Cerámica",
+  },
+  {
+    name: "Carlos Ruiz",
+    bio: "Maestro ebanista dedicado a la creación de muebles sostenibles y funcionales.",
+    profileImage: "/images/carlos_profile.png",
+    heroBanner: "/images/carlos_hero.jpg",
+    category: "Madera",
+  },
+  {
+    name: "Maria Silva",
+    bio: "Diseñadora textil enfocada en el teñido natural y tejidos de lino orgánico.",
+    profileImage: "/images/maria_profile.png",
+    heroBanner: "/images/maria_hero.jpg",
+    category: "Textiles",
+  },
+  {
+    name: "Elena Joyas",
+    bio: "Orfebre minimalista que trabaja con metales reciclados y piedras locales.",
+    profileImage: "/images/elena_profile.png",
+    heroBanner: "/images/elena_hero.jpg",
+    category: "Joyería",
+  },
+  {
+    name: "Mateo Gómez",
+    bio: "Explorando la intersección entre el diseño moderno y la alfarería clásica.",
+    profileImage: "/images/mateo_profile.png",
+    heroBanner: "/images/mateo_hero.jpg",
+    category: "Cerámica",
+  },
+  {
+    name: "Alita Guerrera",
+    bio: "Diseñadora textil que combina técnicas tradicionales con estilos contemporáneos.",
+    profileImage: "/images/alita_profile.png",
+    heroBanner: "/images/alita_hero.jpg",
+    category: "Textiles",
+  },
 ];
 
 /**
  * Main function to seed the database with initial products.
  */
 async function main() {
-  console.log("Starting seed...");
+  console.log("🚀 Starting database seed...");
 
-  // Optional: Clear existing products to avolicates during testing
+  // 1. Clean existing data
   await prisma.product.deleteMany();
+  await prisma.seller.deleteMany();
+  console.log("🧹 Cleaned existing data.");
 
-  for (const product of initialProducts) {
-    await prisma.product.create({
-      data: product,
-    });
+  // 2. Create Sellers and store them in an array to use their IDs
+  const createdSellers = [];
+  for (const s of initialSellers) {
+    const seller = await prisma.seller.create({ data: s });
+    createdSellers.push(seller);
+  }
+  console.log(`👤 Created ${createdSellers.length} sellers.`);
+
+  // 3. Create Products and assign a random seller from the same category
+  for (const p of initialProducts) {
+    // Filter created sellers that match the product's category
+    const matchingSellers = createdSellers.filter(
+      (s) => s.category === p.category,
+    );
+
+    // Pick a random seller from the matching list
+    const assignedSeller =
+      matchingSellers[Math.floor(Math.random() * matchingSellers.length)];
+
+    if (assignedSeller) {
+      await prisma.product.create({
+        data: {
+          title: p.title,
+          price: p.price,
+          category: p.category,
+          image: p.image,
+          sellerId: assignedSeller.id, // Mandatory relational ID
+        },
+      });
+    }
   }
 
-  console.log("Seed finished successfully!");
+  console.log("✨ Seed finished successfully!");
 }
 
 main()
