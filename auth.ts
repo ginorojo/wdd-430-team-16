@@ -11,7 +11,6 @@ import bcrypt from "bcryptjs";
  * Integrates the Prisma Adapter for MongoDB persistence and Google OAuth.
  */
 export const { auth, handlers, signIn, signOut } = NextAuth({
-  debug: true, // <--- ⚠️ AGREGA ESTO AQUÍ
   ...authConfig, // Extend the Edge-compatible config
 
   // Connects NextAuth to our Prisma Client (MongoDB)
