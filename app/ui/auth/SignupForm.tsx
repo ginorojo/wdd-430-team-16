@@ -1,10 +1,10 @@
 'use client';
 
 import { registerUser } from '@/features/auth/actions';
-import { useFormState } from 'react-dom';
+import { useActionState } from 'react';
 
 export default function SignupForm() {
-  const [state, dispatch] = useFormState(registerUser, undefined);
+  const [state, dispatch] = useActionState(registerUser, undefined);
 
   return (
     <div className="max-w-md w-full mx-auto p-6 bg-white rounded-lg shadow-md border">
