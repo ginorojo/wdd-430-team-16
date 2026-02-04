@@ -14,7 +14,7 @@ export const authConfig = {
       const isLoggedIn = !!auth?.user;
 
       // 1. Identify where the user is trying to go
-const protectedRoutes = ['/dashboard', '/artisans', '/sellers', '/settings'];
+const protectedRoutes = ['/dashboard','/settings'];
       
       // Verificamos si la ruta actual empieza con alguna de las protegidas
       const isProtectedRoute = protectedRoutes.some(route => 
