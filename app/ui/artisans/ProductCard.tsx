@@ -16,9 +16,11 @@ export default function ProductCard({data}: {data: Product}) {
       </div>
 
       {/* Info Producto */}
+      <Link href={`/artisans/${data.id}`} key={data.id}>  
+
       <h3 className="font-semibold text-[#1F1F1F] text-md mb-0.5">{data.title}</h3>
       <p className="font-bold text-[#1F1F1F] text-sm mb-3">${data.price.toFixed(2)}</p>
-
+</Link>
       {/* Info Autor */}
       <Link 
         href={`/sellers/${data.sellerId}`} 

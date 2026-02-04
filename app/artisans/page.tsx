@@ -23,10 +23,8 @@ D
         <div className="flex-1">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {products.map((product) => (
-              <Link href={`/artisans/${product.id}`} key={product.id}>  
 
               <ProductCard key={product.id} data={product} />
-              </Link>
             ))}
           </div>
         </div>
