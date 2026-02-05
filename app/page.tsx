@@ -12,7 +12,7 @@ const HomePage = async () => {
   return (
     <div className="w-full">
 
-      <section className="relative h-[500px] w-full flex items-center px-10 md:px-20 overflow-hidden">
+      <section className="relative h-125 w-full flex items-center px-10 md:px-20 overflow-hidden">
         {/* Background Image Container */}
         <div className="absolute inset-0 z-0">
           <img

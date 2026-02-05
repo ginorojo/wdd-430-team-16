@@ -45,7 +45,7 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="w-64 flex-shrink-0 pr-8 hidden md:block">
+    <aside className="w-64 shrink-0 pr-8 hidden md:block">
       <div className="mb-8">
         <h3 className="font-bold text-lg text-[#1F1F1F] mb-4 flex justify-between items-center">
           Categoría <ChevronUp className="w-4 h-4" />
