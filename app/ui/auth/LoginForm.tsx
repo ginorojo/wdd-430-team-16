@@ -26,7 +26,8 @@ export default function LoginForm() {
           <label className="block text-sm font-medium text-gray-700">Password</label>
           <input 
             name="password" 
-            type="password" 
+            type="password"
+            placeholder="••••••••"
             className="w-full mt-1 p-2 border rounded focus:ring-2 focus:ring-blue-500 text-black"
           />
           {state?.error?.password && <p className="text-red-500 text-sm">{state.error.password}</p>}

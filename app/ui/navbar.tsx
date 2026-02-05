@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { ShoppingCart, LogOut, User } from "lucide-react";
 import { auth, signOut } from "@/auth"; // Importamos la sesión y la función de salida
+import { getCart } from "@/features/cart/actions";
 
 /**
  * Global Navigation Component.
@@ -15,6 +16,9 @@ export const Navbar = async () => {
   // 1. Fetch the user session on the server
   const session = await auth();
   const user = session?.user;
+  // 2. Fetch cart to show badge
+  const cart = await getCart();
+  const itemCount = cart?.items?.reduce((s, it) => s + (it.quantity || 0), 0) || 0;
 
   return (
     <nav className="bg-[#F7F3E7] flex items-center justify-between px-8 py-6 border-b border-gray-100 shadow-sm">
@@ -84,9 +88,14 @@ export const Navbar = async () => {
         )}
 
         {/* --- CART BUTTON --- */}
-        <button className="relative p-1 hover:bg-gray-100 rounded-full transition-colors">
+        <Link href="/cart" className="relative p-1 hover:bg-gray-100 rounded-full transition-colors">
           <ShoppingCart size={24} className="text-[#283618]" />
-        </button>
+          {itemCount > 0 && (
+            <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center">
+              {itemCount}
+            </span>
+          )}
+        </Link>
       </div>
     </nav>
   );
