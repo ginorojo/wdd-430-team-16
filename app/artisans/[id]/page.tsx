@@ -1,18 +1,19 @@
-/**
- * @file page.tsx
- * @description Home page component containing the hero banner, popular categories, and featured artisan listings.
- */
-
 import styles from "../../page-01.module.css"
 import { getProductById } from "@/features/products/queries";
-import { Product } from "@/features/products/types";
+// Importamos notFound para manejar errores de Next.js correctamente
+import { notFound } from "next/navigation"; 
 
-export default async function Page(props:{ params: Promise<{ id: string }> }) {
+export default async function Page(props: { params: Promise<{ id: string }> }) {
+  const { id } = await props.params;
+  
+  // 1. Eliminamos el tipado estricto en la declaración
+  const product = await getProductById(id);
 
-      const { id } = await props.params;
-      const product : Product = await getProductById(id)
-
-
+  // 2. Validación de existencia (Type Guard)
+  // Si el producto no existe en MongoDB, mostramos la página 404 de Next.js
+  if (!product) {
+    notFound();
+  }
 
   return (
     <main className={styles.pageBackground}>
@@ -33,39 +34,29 @@ export default async function Page(props:{ params: Promise<{ id: string }> }) {
             <div className={styles.qtyRow}>
               <label className={styles.qtyLabel}>Cantidad</label>
               <div className={styles.qtyControls}>
-                <button
-                  type="button"
-                  className={styles.qtyBtn}
-                  aria-label="disminuir"
-                >
-                  -
-                </button>
+                <button type="button" className={styles.qtyBtn}> - </button>
                 <input
                   type="number"
                   className={styles.qtyInput}
                   defaultValue={1}
-                  aria-label="cantidad"
                 />
-                <button
-                  type="button"
-                  className={styles.qtyBtn}
-                  aria-label="aumentar"
-                >
-                  +
-                </button>
+                <button type="button" className={styles.qtyBtn}> + </button>
               </div>
             </div>
 
             <button className={styles.addButton}>Añadir al Carrito</button>
 
+            {/* 3. Corrección de Propiedades: Usamos el objeto 'seller' */}
             <div className={styles.creator}>
               <img
-                src={product.authorImage}
-                alt={product.author}
+                src={product.seller?.profileImage || "/images/default-avatar.png"}
+                alt={product.seller?.name || "Artesano"}
                 className={styles.avatar}
               />
               <div>
-                <p className={styles.creatorBy}> {product.author}</p>
+                <p className={styles.creatorBy}>
+                  {product.seller?.name || "Artesano independiente"}
+                </p>
               </div>
             </div>
 
@@ -78,6 +69,8 @@ export default async function Page(props:{ params: Promise<{ id: string }> }) {
                 </div>
               </div>
             </div>
+
+            {/* Reseña de ejemplo estática */}
             <div className={styles.creator}>
               <img
                 src="/images/carlos_profile.png"
@@ -87,7 +80,10 @@ export default async function Page(props:{ params: Promise<{ id: string }> }) {
               <div>
                 <p className={styles.opinionGiver}>Carlos</p>
                 <p className={styles.dateGiver}>13 Oct 2025</p>
-                <p className={styles.creatorBy}>I am absolutely obsessed with this clay vase. You can tell it’s high-quality just by the weight and the texture—it has that perfect 'handmade' feel that adds so much character to my living room</p>
+                <p className={styles.creatorBy}>
+                  I am absolutely obsessed with this clay vase. 
+                  You can tell it’s high-quality just by the weight...
+                </p>
               </div>
             </div>
           </aside>
@@ -95,5 +91,4 @@ export default async function Page(props:{ params: Promise<{ id: string }> }) {
       </div>
     </main>
   );
-};
-
+}

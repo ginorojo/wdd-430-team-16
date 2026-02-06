@@ -1,16 +1,26 @@
 import { z } from "zod";
 import { ProductSchema } from "./schemas";
-import type { Product as PrismaProduct } from "../../generated/prisma/client";
-// 👆 Ajusta esta importación si tu generated está en otro lado
+import type { 
+  Product as PrismaProduct, 
+  Seller as PrismaSeller 
+} from "../../generated/prisma/client";
 
-// Input type for creating a product (inferred from Zod)
+// Input types
 export type CreateProductInput = z.infer<typeof ProductSchema>;
-
-// Input type for updating a product
 export type UpdateProductInput = Partial<CreateProductInput> & { id: string };
 
-// The full Product type returned from Database
-export type Product = PrismaProduct;
+/**
+ * 1. Definimos el tipo Seller basado en Prisma
+ */
+export type Seller = PrismaSeller;
+
+/**
+ * 2. Extendemos el tipo Product para que incluya la relación.
+ * Esto es lo que permitirá que 'data.seller.name' sea válido.
+ */
+export type Product = PrismaProduct & {
+  seller?: Seller; // Es opcional porque solo existe si usas 'include'
+};
 
 // Standardized API Response structure
 export type ActionResponse<T = null> = {
