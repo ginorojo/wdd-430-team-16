@@ -1,10 +1,14 @@
 import React from "react";
 import Image from "next/image";
 import styles from "../page-01.module.css";
-import { getCart, removeFromCart, clearCart } from "@/features/cart/actions";
+import { getCart, clearCart } from "@/features/cart/actions";
 import { getProductById } from "@/features/products/queries";
-import { notFound } from "next/navigation";
 import CartItemControls from "./CartItemControls";
+
+async function handleClearCart(): Promise<void> {
+  'use server';
+  await clearCart();
+}
 
 export default async function CartPage() {
   const cart = await getCart();
@@ -73,7 +77,7 @@ export default async function CartPage() {
           </div>
 
           <div>
-            <form action={clearCart}>
+            <form action={handleClearCart}>
               <button type="submit" className="px-4 py-2 mr-2 bg-red-600 text-white rounded">Vaciar carrito</button>
             </form>
             <button className="px-4 py-2 bg-green-600 text-white rounded">Proceder al pago</button>
