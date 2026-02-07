@@ -32,6 +32,7 @@ export default function LoginForm() {
           <input
             name="password"
             type="password"
+            placeholder="••••••••"
             className="w-full mt-1 p-2 border rounded focus:ring-2 focus:ring-blue-500 text-black"
           />
           {/* Solución al error de TS: verificar si 'password' existe en el objeto error */}
