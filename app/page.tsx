@@ -7,11 +7,11 @@ import React from "react";
 import ArtisanCard from "./ui/ArtisanCard";
 import { getBestSellers } from "@/features/sellers/queries";
 import Link from "next/link";
-const HomePage = async () => {  
+
+const HomePage = async () => {
   const artisans = await getBestSellers();
   return (
     <div className="w-full">
-
       <section className="relative h-125 w-full flex items-center px-10 md:px-20 overflow-hidden">
         {/* Background Image Container */}
         <div className="absolute inset-0 z-0">
@@ -45,12 +45,13 @@ const HomePage = async () => {
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {[
-            { name: "Ceramics", picture: "ceramics.png" },
-            { name: "Woodworking", picture: "wood.png" },
+            { name: "Cerámica", picture: "ceramics.png" },
+            { name: "Madera", picture: "wood.png" },
             { name: "Textiles", picture: "textiles.png" },
-            { name: "Jewelry", picture: "jewelry.png" },
+            { name: "Joyería", picture: "jewelry.png" },
           ].map((item) => (
-            <div
+            <Link
+              href={`/artisans?category=${item.name}`}
               key={item.name}
               className="flex flex-col items-center group cursor-pointer"
             >
@@ -60,7 +61,7 @@ const HomePage = async () => {
               <h3 className="text-xl font-semibold text-[#606C38]">
                 {item.name}
               </h3>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
@@ -73,8 +74,8 @@ const HomePage = async () => {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {artisans.map((artisan) => (
-              <Link 
-                href={`/seller/${artisan.id}`} 
+              <Link
+                href={`/sellers/${artisan.id}`}
                 key={artisan.id}
                 className="transition-transform duration-300 hover:-translate-y-2"
               >
