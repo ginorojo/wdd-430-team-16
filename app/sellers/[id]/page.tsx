@@ -1,12 +1,6 @@
-/**
- * @file [id]/page.tsx
- * @description Dynamic route for individual artisan profiles.
- * Fetches seller details and their associated products from MongoDB.
- */
-
-import { notFound } from "next/navigation";
-import ArtisanCard from "../../ui/ArtisanCard";
+import { notFound, redirect } from "next/navigation"; // Add redirect
 import { getSellerWithProducts } from "@/features/sellers/queries";
+import { auth } from "@/auth"; // Import your auth utility
 import NextLink from "next/link";
 import Image from "next/image";
 
@@ -14,11 +8,21 @@ export default async function SellerProfilePage(props: {
   params: Promise<{ id: string }>;
 }) {
   const params = await props.params;
-  const seller = await getSellerWithProducts(params.id);
 
-  // Trigger 404 if seller doesn't exist
+  // 1. Fetch seller and session in parallel for performance
+  const [seller, session] = await Promise.all([
+    getSellerWithProducts(params.id),
+    auth(),
+  ]);
+
+  // 2. Trigger 404 if seller doesn't exist
   if (!seller) {
     notFound();
+  }
+
+  // 3. Logic: If the visitor is the owner of this profile, send them to the dashboard
+  if (session?.user?.email === seller.email) {
+    redirect("/sellers/dashboard");
   }
 
   return (
@@ -28,23 +32,22 @@ export default async function SellerProfilePage(props: {
         <Image
           src={seller.heroBanner}
           alt={seller.name}
-          width={500}
-          height={400}
-          className="w-full h-full object-cover"
+          fill // Using fill for hero banners is usually better for responsiveness
+          className="object-cover"
+          priority
         />
         <div className="absolute inset-0 bg-black/30" />
       </div>
 
-      {/* Profile Info Overlay */}
       <div className="max-w-6xl mx-auto px-4">
+        {/* Profile Info Overlay */}
         <div className="relative -mt-20 flex flex-col items-center md:items-start md:flex-row md:gap-8">
-          <div className="w-40 h-40 rounded-full border-8 border-[#FEFAE0] overflow-hidden bg-gray-200 shadow-xl">
+          <div className="w-40 h-40 rounded-full border-8 border-[#FEFAE0] overflow-hidden bg-gray-200 shadow-xl relative">
             <Image
               src={seller.profileImage}
               alt={seller.name}
-              width={500}
-              height={500}
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
             />
           </div>
 
@@ -58,7 +61,7 @@ export default async function SellerProfilePage(props: {
 
         {/* Bio Section */}
         <div className="mt-12 max-w-3xl">
-          <h2 className="text-3xl font-bold text-[#283618] mb-10">Sobre Mí</h2>
+          <h2 className="text-2xl font-bold text-[#283618] mb-4">Sobre Mí</h2>
           <p className="text-lg text-[#283618]/80 leading-relaxed">
             {seller.bio || "Este artesano aún no ha añadido una biografía."}
           </p>
@@ -77,26 +80,25 @@ export default async function SellerProfilePage(props: {
               {seller.products.map((product) => (
                 <div
                   key={product.id}
-                  className="bg-white rounded-xl overflow-hidden shadow-sm border border-[#DDA15E]/20 hover:shadow-md transition-shadow"
+                  className="bg-white flex flex-col rounded-xl overflow-hidden shadow-sm border border-[#DDA15E]/20 hover:shadow-md transition-shadow"
                 >
-                  <div className="h-48 overflow-hidden">
+                  <div className="h-48 overflow-hidden relative">
                     <Image
-                      width={500}
-                      height={500}
+                      fill
                       src={product.image}
                       alt={product.title}
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                      className="object-cover hover:scale-105 transition-transform duration-300"
                     />
                   </div>
-                  <div className="p-4">
+                  <div className="p-4 flex flex-col flex-grow">
                     <h3 className="font-bold text-[#283618]">
                       {product.title}
                     </h3>
-                    <p className="text-[#BC6C25] font-semibold mt-1">
+                    <p className="text-[#BC6C25] font-semibold mt-1 mb-4">
                       ${product.price.toFixed(2)}
                     </p>
                     <NextLink
-                      href={`/artisans/${product.id}`}
+                      href={`/marketplace/${product.id}`} // Adjusted to marketplace route
                       className="mt-auto block w-full text-center py-2 bg-[#BC6C25] text-white rounded-lg text-sm font-medium hover:bg-[#a05b1f] transition-colors"
                     >
                       Ver Detalles

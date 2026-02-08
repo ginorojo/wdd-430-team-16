@@ -1,66 +1,74 @@
 import React from "react";
 import Link from "next/link";
 import { ShoppingCart, LogOut, User } from "lucide-react";
-import { auth, signOut } from "@/auth"; // Importamos la sesión y la función de salida
+import { auth, signOut } from "@/auth";
 import { getCart } from "@/features/cart/actions";
+import MobileMenu from "./MobileMenu";
 
-/**
- * Global Navigation Component.
- *
- * Displays the branding, main navigation links, and user session controls.
- * It dynamically renders "Login" or "Logout" based on the authentication status.
- *
- * @returns {JSX.Element} The rendered Navbar component.
- */
 export const Navbar = async () => {
-  // 1. Fetch the user session on the server
   const session = await auth();
   const user = session?.user;
-  // 2. Fetch cart to show badge
   const cart = await getCart();
-  const itemCount = cart?.items?.reduce((s, it) => s + (it.quantity || 0), 0) || 0;
+  const itemCount =
+    cart?.items?.reduce((s, it) => s + (it.quantity || 0), 0) || 0;
+
+  // Reusable Navigation Links
+  const NavLinks = () => (
+    <>
+      <Link
+        href="/artisans"
+        className="hover:text-[#BC6C25] text-[#283618] transition-colors py-2 lg:py-0"
+      >
+        Explore
+      </Link>
+      <Link
+        href="/sellers"
+        className="hover:text-[#BC6C25] text-[#283618] transition-colors py-2 lg:py-0"
+      >
+        Artisans
+      </Link>
+      <Link
+        href="/about"
+        className="hover:text-[#BC6C25] text-[#283618] transition-colors py-2 lg:py-0"
+      >
+        About us
+      </Link>
+    </>
+  );
 
   return (
-    <nav className="bg-[#F7F3E7] flex items-center justify-between px-8 py-6 border-b border-gray-100 shadow-sm">
+    <nav className="relative bg-[#F7F3E7] flex items-center justify-between px-4 sm:px-8 py-4 lg:py-6 border-b border-gray-100 shadow-sm">
       {/* --- LOGO SECTION --- */}
-      <div className="flex items-center gap-3">
-        <div className="w-12 h-12 flex items-center justify-center rounded-sm">
-          <img
-            src="/images/logo.png"
-            alt="Artisanal Refuge Logo"
-            className="w-10 h-10 object-contain"
-          />
-        </div>
-        <Link href="/" className="font-bold text-xl tracking-tight text-[#c06941]">
+      <div className="flex items-center gap-2 sm:gap-3">
+        <img
+          src="/images/logo.png"
+          alt="Logo"
+          className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
+        />
+        <Link
+          href="/"
+          className="font-bold text-lg sm:text-xl leading-tight tracking-tight text-[#c06941]"
+        >
           Artisanal
-          <br /> Refuge
+          <br className="hidden sm:block" /> Refuge
         </Link>
       </div>
 
-      {/* --- NAVIGATION LINKS --- */}
-      <div className="flex text-[#000] items-center gap-8 font-medium">
-        <Link href="/explore" className="hover:text-[#BC6C25] transition-colors">
-          Explore
-        </Link>
-        <Link href="/artisans" className="hover:text-[#BC6C25] transition-colors">
-          Artisans
-        </Link>
-        <Link href="/about" className="hover:text-[#BC6C25] transition-colors">
-          About us
-        </Link>
+      {/* --- DESKTOP NAVIGATION --- */}
+      <div className="hidden lg:flex items-center gap-8 font-medium text-[#000]">
+        <NavLinks />
 
-        {/* --- DYNAMIC AUTH SECTION --- */}
         {user ? (
-          // A) USER IS LOGGED IN
           <div className="flex items-center gap-4 border-l pl-6 border-gray-300">
-            <div className="flex items-center gap-2 text-[#c06941]">
+            <Link
+              href="/profile"
+              className="flex items-center gap-2 text-[#c06941]"
+            >
               <User size={20} />
               <span className="text-sm font-semibold truncate max-w-[100px]">
-                {user.name?.split(" ")[0]} {/* Show only first name */}
+                {user.name?.split(" ")[0]}
               </span>
-            </div>
-
-            {/* Logout Server Action */}
+            </Link>
             <form
               action={async () => {
                 "use server";
@@ -69,16 +77,13 @@ export const Navbar = async () => {
             >
               <button
                 type="submit"
-                className="flex items-center gap-2 text-sm text-red-600 hover:text-red-700 font-semibold transition-colors"
-                title="Sign Out"
+                className="flex items-center gap-2 text-sm text-red-600 font-semibold"
               >
-                Logout
-                <LogOut size={18} />
+                Logout <LogOut size={18} />
               </button>
             </form>
           </div>
         ) : (
-          // B) USER IS GUEST
           <Link
             href="/login"
             className="hover:text-[#BC6C25] font-semibold transition-colors"
@@ -86,16 +91,61 @@ export const Navbar = async () => {
             Login
           </Link>
         )}
+      </div>
 
-        {/* --- CART BUTTON --- */}
-        <Link href="/cart" className="relative p-1 hover:bg-gray-100 rounded-full transition-colors">
+      {/* --- RIGHT SIDE: CART & MOBILE TOGGLE --- */}
+      <div className="flex items-center gap-2 sm:gap-4">
+        {/* CART (Always visible) */}
+        <Link
+          href="/cart"
+          className="relative p-2 hover:bg-black/5 rounded-full transition-colors"
+        >
           <ShoppingCart size={24} className="text-[#283618]" />
           {itemCount > 0 && (
-            <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center">
+            <span className="absolute top-0 right-0 bg-red-600 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center">
               {itemCount}
             </span>
           )}
         </Link>
+
+        {/* MOBILE MENU TOGGLE (Client Component) */}
+        <MobileMenu user={user}>
+          <div className="flex flex-col gap-4 font-medium">
+            <NavLinks />
+            <div className="border-t border-gray-200 pt-4 flex flex-col gap-4">
+              {user ? (
+                <>
+                  <Link
+                    href="/profile"
+                    className="flex items-center gap-2 text-[#c06941] font-bold"
+                  >
+                    <User size={20} /> {user.name}
+                  </Link>
+                  <form
+                    action={async () => {
+                      "use server";
+                      await signOut({ redirectTo: "/" });
+                    }}
+                  >
+                    <button
+                      type="submit"
+                      className="flex items-center gap-2 text-red-600 font-bold"
+                    >
+                      Logout <LogOut size={18} />
+                    </button>
+                  </form>
+                </>
+              ) : (
+                <Link
+                  href="/login"
+                  className="text-center py-3 bg-[#BC6C25] text-white rounded-lg"
+                >
+                  Login
+                </Link>
+              )}
+            </div>
+          </div>
+        </MobileMenu>
       </div>
     </nav>
   );

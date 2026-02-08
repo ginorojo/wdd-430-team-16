@@ -16,7 +16,7 @@ export const ProductSchema = z.object({
 
   description: z.string().optional(),
 
-  author: z.string().min(2, { message: "Author name is required" }),
+  sellerId: z.string().min(2, { message: "SellerId name is required" }),
 
   category: z.string().min(1, { message: "Please select a category" }),
 

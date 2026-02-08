@@ -46,6 +46,7 @@ model Seller {
   profileImage String // The circular profile photo
   heroBanner   String // The large banner image used in cards/profile
   category     String // e.g., "Cerámica", "Textiles"
+  email        String
 
   // Relations
   products Product[] // Link to the products this artisan creates
