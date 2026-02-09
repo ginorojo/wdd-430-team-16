@@ -1,6 +1,11 @@
 import { z } from "zod";
 import { SellerSchema } from "./schemas";
-import type { Seller as PrismaSeller } from "../../generated/prisma/client";
+// Change the import to point to the standard package
+import type { Seller as PrismaSeller } from "@prisma/client";
+
+// Input type for creating a seller (inferred from Zod)
+// ...
+
 // 👆 Ajusta esta importación si tu generated está en otro lado
 
 // Input type for creating a seller (inferred from Zod)
