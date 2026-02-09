@@ -6,6 +6,7 @@ import { getProductById } from "@/features/products/queries";
 import CartItemControls from "./CartItemControls";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 async function handleClearCart(): Promise<void> {
   "use server";
@@ -13,7 +14,12 @@ async function handleClearCart(): Promise<void> {
 }
 
 export default async function CartPage() {
-  const cart = await getCart();
+  let cart = null;
+  try {
+    cart = await getCart();
+  } catch (error) {
+    console.error("Error fetching cart:", error);
+  }
 
   if (!cart) {
     return (
