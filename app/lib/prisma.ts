@@ -1,8 +1,7 @@
 // src/lib/prisma.ts
-import "dotenv/config";
-// 👇 IMPORTANTE: Se ajusta la ruta al cliente generado, como indica el comentario en el seeder.
-import { PrismaClient } from "../../generated/prisma/client";
+import { PrismaClient } from "@prisma/client";
 
+// Evita múltiples instancias de Prisma Client en desarrollo (Hot Reload)
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
 export const prisma = globalForPrisma.prisma || new PrismaClient();

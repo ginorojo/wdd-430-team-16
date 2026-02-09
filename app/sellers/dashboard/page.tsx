@@ -1,15 +1,14 @@
 /**
  * @file dashboard/page.tsx
- * @description Responsive Seller dashboard with adaptive table structure.
+ * @description Responsive Seller dashboard compatible con Vercel.
  */
 
-import { PrismaClient } from "../../../generated/prisma/client";
+// ✅ Cambiamos la importación local por la instancia global que configuramos
+import { prisma } from "@/app/lib/prisma"; 
 import ProductRow from "@/app/ui/dashboard/ProductRow";
 import AddProductModal from "@/app/ui/dashboard/AddProductModal";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
-
-const prisma = new PrismaClient();
 
 export default async function SellerDashboard() {
   const session = await auth();
@@ -18,6 +17,7 @@ export default async function SellerDashboard() {
     redirect("/login");
   }
 
+  // Usamos la instancia 'prisma' importada arriba
   const seller = await prisma.seller.findFirst({
     where: { email: session.user.email },
   });
@@ -77,25 +77,21 @@ export default async function SellerDashboard() {
           </div>
         </div>
 
-        {/* --- RESPONSIVE TABLE CONTAINER --- */}
+        {/* --- TABLE CONTAINER --- */}
         <div className="bg-white rounded-xl shadow-sm border border-[#DDA15E]/20 overflow-hidden">
-          {/* On Mobile: The <table> tag is essentially ignored by the ProductRow's <div> 
-              On Desktop: The table-fixed or block classes help manage layout
-          */}
-          <table className="w-full border-collapse block md:table">
-            {/* Hiding the header on mobile using hidden md:table-header-group */}
+          <table className="w-full border-collapse">
             <thead className="hidden md:table-header-group bg-[#606C38] text-[#FEFAE0]">
               <tr>
-                <th className="p-4 font-semibold">Imagen</th>
-                <th className="p-4 font-semibold">Producto</th>
-                <th className="p-4 font-semibold">Categoría</th>
-                <th className="p-4 font-semibold">Precio</th>
+                <th className="p-4 text-left font-semibold">Imagen</th>
+                <th className="p-4 text-left font-semibold">Producto</th>
+                <th className="p-4 text-left font-semibold">Categoría</th>
+                <th className="p-4 text-left font-semibold">Precio</th>
                 <th className="p-4 text-right font-semibold">Acciones</th>
               </tr>
             </thead>
 
-            {/* Change tbody to block on mobile so divs inside can flow normally */}
-            <tbody className="divide-y divide-gray-100 block md:table-row-group">
+            {/* Eliminamos 'block' para mantener la estructura de tabla estándar */}
+            <tbody className="divide-y divide-gray-100">
               {products.map((product) => (
                 <ProductRow key={product.id} product={product} />
               ))}
