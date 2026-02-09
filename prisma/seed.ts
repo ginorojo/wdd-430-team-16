@@ -62,6 +62,7 @@ const initialSellers = [
     profileImage: "/images/alejandra_profile.png",
     heroBanner: "/images/alejandra_hero.jpg",
     category: "Cerámica",
+    email: "alejandra@example.com",
   },
   {
     name: "Carlos Ruiz",
@@ -69,6 +70,7 @@ const initialSellers = [
     profileImage: "/images/carlos_profile.png",
     heroBanner: "/images/carlos_hero.jpg",
     category: "Madera",
+    email: "carlos@example.com",
   },
   {
     name: "Maria Silva",
@@ -76,6 +78,7 @@ const initialSellers = [
     profileImage: "/images/maria_profile.png",
     heroBanner: "/images/maria_hero.jpg",
     category: "Textiles",
+    email: "maria@example.com",
   },
   {
     name: "Elena Joyas",
@@ -83,6 +86,7 @@ const initialSellers = [
     profileImage: "/images/elena_profile.png",
     heroBanner: "/images/elena_hero.jpg",
     category: "Joyería",
+    email: "elena@example.com",
   },
   {
     name: "Mateo Gómez",
@@ -90,6 +94,7 @@ const initialSellers = [
     profileImage: "/images/mateo_profile.png",
     heroBanner: "/images/mateo_hero.jpg",
     category: "Cerámica",
+    email: "mateo@example.com",
   },
   {
     name: "Alita Guerrera",
@@ -97,6 +102,7 @@ const initialSellers = [
     profileImage: "/images/alita_profile.png",
     heroBanner: "/images/alita_hero.jpg",
     category: "Textiles",
+    email: "alita@example.com",
   },
 ];
 
