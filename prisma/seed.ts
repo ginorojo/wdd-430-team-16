@@ -1,7 +1,7 @@
 // prisma/seed.ts
 import "dotenv/config";
-// 👇 Aquí también cambiamos la ruta
-import { PrismaClient } from "../generated/prisma/client";
+// 👇 Cambia la importación para usar el paquete estándar
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 const initialProducts = [
