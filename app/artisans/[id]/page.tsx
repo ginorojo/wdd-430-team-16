@@ -1,11 +1,11 @@
-import styles from "../../page-01.module.css"
+import styles from "../../page-01.module.css";
 import { getProductById } from "@/features/products/queries";
 // Importamos notFound para manejar errores de Next.js correctamente
-import { notFound } from "next/navigation"; 
+import { notFound } from "next/navigation";
 
-export default async function Page(props: { params: Promise<{ id: string }> }) {
-  const { id } = await props.params;
-  
+export default async function Page({ params }: { params: { id: string } }) {
+  const { id } = params;
+
   // 1. Eliminamos el tipado estricto en la declaración
   const product = await getProductById(id);
 
@@ -34,13 +34,19 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             <div className={styles.qtyRow}>
               <label className={styles.qtyLabel}>Cantidad</label>
               <div className={styles.qtyControls}>
-                <button type="button" className={styles.qtyBtn}> - </button>
+                <button type="button" className={styles.qtyBtn}>
+                  {" "}
+                  -{" "}
+                </button>
                 <input
                   type="number"
                   className={styles.qtyInput}
                   defaultValue={1}
                 />
-                <button type="button" className={styles.qtyBtn}> + </button>
+                <button type="button" className={styles.qtyBtn}>
+                  {" "}
+                  +{" "}
+                </button>
               </div>
             </div>
 
@@ -49,7 +55,9 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             {/* 3. Corrección de Propiedades: Usamos el objeto 'seller' */}
             <div className={styles.creator}>
               <img
-                src={product.seller?.profileImage || "/images/default-avatar.png"}
+                src={
+                  product.seller?.profileImage || "/images/default-avatar.png"
+                }
                 alt={product.seller?.name || "Artesano"}
                 className={styles.avatar}
               />
@@ -81,8 +89,8 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                 <p className={styles.opinionGiver}>Carlos</p>
                 <p className={styles.dateGiver}>13 Oct 2025</p>
                 <p className={styles.creatorBy}>
-                  I am absolutely obsessed with this clay vase. 
-                  You can tell it’s high-quality just by the weight...
+                  I am absolutely obsessed with this clay vase. You can tell
+                  it’s high-quality just by the weight...
                 </p>
               </div>
             </div>

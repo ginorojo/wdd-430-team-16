@@ -55,7 +55,7 @@ export const Navbar = async () => {
       </div>
 
       {/* --- DESKTOP NAVIGATION --- */}
-      <div className="hidden lg:flex items-center gap-8 font-medium text-[#000]">
+      <div className="hidden lg:flex items-center gap-8 font-medium text-black">
         <NavLinks />
 
         {user ? (
@@ -65,7 +65,7 @@ export const Navbar = async () => {
               className="flex items-center gap-2 text-[#c06941]"
             >
               <User size={20} />
-              <span className="text-sm font-semibold truncate max-w-[100px]">
+              <span className="text-sm font-semibold truncate max-w-25">
                 {user.name?.split(" ")[0]}
               </span>
             </Link>
