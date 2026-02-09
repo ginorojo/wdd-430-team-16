@@ -1,9 +1,9 @@
 import { z } from "zod";
 import { ProductSchema } from "./schemas";
-import type { 
-  Product as PrismaProduct, 
-  Seller as PrismaSeller 
-} from "../../generated/prisma/client";
+import type {
+  Product as PrismaProduct,
+  Seller as PrismaSeller,
+} from "@prisma/client";
 
 // Input types
 export type CreateProductInput = z.infer<typeof ProductSchema>;
