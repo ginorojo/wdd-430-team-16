@@ -5,12 +5,12 @@
  *   un resumen con promedio y distribución por estrellas.
  */
 
-import { prisma } from '@/app/lib/prisma';
+import { prisma } from "@/app/lib/prisma";
 
 export interface ReviewWithUser {
   id: string;
   rating: number;
-  comment: string;
+  comment: string | null;
   createdAt: Date;
   user: {
     name: string | null;
@@ -27,11 +27,13 @@ export interface ReviewSummaryData {
 /**
  * Obtiene las 5 reseñas más recientes de un producto.
  */
-export async function getRecentReviews(productId: string): Promise<ReviewWithUser[]> {
+export async function getRecentReviews(
+  productId: string,
+): Promise<ReviewWithUser[]> {
   try {
     const reviews = await prisma.review.findMany({
       where: { productId },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: "desc" },
       take: 5,
       include: {
         user: {
@@ -41,7 +43,7 @@ export async function getRecentReviews(productId: string): Promise<ReviewWithUse
     });
     return reviews;
   } catch (error) {
-    console.error('Error fetching reviews:', error);
+    console.error("Error fetching reviews:", error);
     return [];
   }
 }
@@ -49,7 +51,9 @@ export async function getRecentReviews(productId: string): Promise<ReviewWithUse
 /**
  * Obtiene el resumen de reseñas: promedio, total y distribución por estrellas.
  */
-export async function getReviewSummary(productId: string): Promise<ReviewSummaryData> {
+export async function getReviewSummary(
+  productId: string,
+): Promise<ReviewSummaryData> {
   try {
     const reviews = await prisma.review.findMany({
       where: { productId },
@@ -57,7 +61,13 @@ export async function getReviewSummary(productId: string): Promise<ReviewSummary
     });
 
     const totalReviews = reviews.length;
-    const distribution: Record<number, number> = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+    const distribution: Record<number, number> = {
+      5: 0,
+      4: 0,
+      3: 0,
+      2: 0,
+      1: 0,
+    };
 
     let sum = 0;
     for (const r of reviews) {
@@ -69,7 +79,11 @@ export async function getReviewSummary(productId: string): Promise<ReviewSummary
 
     return { averageRating, totalReviews, distribution };
   } catch (error) {
-    console.error('Error fetching review summary:', error);
-    return { averageRating: 0, totalReviews: 0, distribution: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 } };
+    console.error("Error fetching review summary:", error);
+    return {
+      averageRating: 0,
+      totalReviews: 0,
+      distribution: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 },
+    };
   }
 }
