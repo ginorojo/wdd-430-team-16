@@ -39,7 +39,7 @@ export default async function CartPage() {
   return (
     <main className={styles.pageBackground}>
       <div className={styles.container}>
-        <h1 className="text-2xl font-semibold mb-4">Tu carrito</h1>
+        <h1 className="text-2xl font-bold mb-4 text-gray-800">Tu carrito</h1>
 
         <div className="space-y-4">
           {itemsWithProduct.length === 0 && (
@@ -47,7 +47,7 @@ export default async function CartPage() {
           )}
 
           {itemsWithProduct.map(({ item, product }) => (
-            <div key={item.id} className="flex items-center gap-4 p-4 bg-white rounded shadow">
+            <div key={item.id} className="flex flex-col gap-4 md:flex-row p-4 md:items-center bg-white rounded shadow ">
               <div className="w-24 h-24 relative">
                 {product?.image ? (
                   <Image src={product.image} alt={product.title} fill className="object-cover rounded" />
@@ -57,8 +57,8 @@ export default async function CartPage() {
               </div>
 
               <div className="flex-1">
-                <h2 className="font-semibold">{product?.title || 'Producto desconocido'}</h2>
-                <p className="text-sm text-gray-600">Cantidad: {item.quantity}</p>
+                <h2 className="font-bold text-gray-800">{product?.title || 'Producto desconocido'}</h2>
+                <p className="text-sm text-gray-800">Cantidad: {item.quantity}</p>
                 <p className="text-sm text-gray-800">Precio: ${product?.price ?? '0.00'}</p>
                 <p className="text-sm text-gray-800">Subtotal: ${(product?.price || 0) * (item.quantity || 0)}</p>
               </div>
@@ -70,13 +70,13 @@ export default async function CartPage() {
           ))}
         </div>
 
-        <div className="mt-6 p-4 bg-white rounded shadow flex items-center justify-between">
+        <div className="mt-6 p-4 bg-white rounded shadow flex  justify-between flex-col items-start md:flex-row gap-2 ">
           <div>
-            <p className="text-sm text-gray-600">Total</p>
-            <p className="text-2xl font-bold">${total.toFixed(2)}</p>
+            <p className="text-sm text-gray-800 ">Total</p>
+            <p className="text-2xl font-bold text-gray-800">${total.toFixed(2)}</p>
           </div>
 
-          <div>
+          <div className="flex flex-col md:flex-row gap-2">
             <form action={handleClearCart}>
               <button type="submit" className="px-4 py-2 mr-2 bg-red-600 text-white rounded">Vaciar carrito</button>
             </form>

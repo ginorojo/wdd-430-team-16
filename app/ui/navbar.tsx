@@ -61,7 +61,7 @@ export const Navbar = async () => {
         {user ? (
           <div className="flex items-center gap-4 border-l pl-6 border-gray-300">
             <Link
-              href="/profile"
+              href="/sellers/dashboard"
               className="flex items-center gap-2 text-[#c06941]"
             >
               <User size={20} />
@@ -116,7 +116,7 @@ export const Navbar = async () => {
               {user ? (
                 <>
                   <Link
-                    href="/profile"
+                    href="/sellers/dashboard"
                     className="flex items-center gap-2 text-[#c06941] font-bold"
                   >
                     <User size={20} /> {user.name}

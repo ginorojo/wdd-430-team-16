@@ -89,7 +89,7 @@ export async function loginUser(prevState: any, formData: FormData) {
     await signIn("credentials", {
       email,
       password,
-      redirectTo: "/dashboard", // Target route upon successful login
+      redirectTo: "/", // Target route upon successful login
     });
   } catch (error) {
     // 3. Error Handling
@@ -119,5 +119,5 @@ export async function loginUser(prevState: any, formData: FormData) {
  * to Google's consent screen.
  */
 export async function loginGoogle() {
-  await signIn("google", { redirectTo: "/dashboard" });
+  await signIn("google", { redirectTo: "/" });
 }

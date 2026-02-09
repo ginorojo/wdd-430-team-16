@@ -1,7 +1,7 @@
 // src/lib/prisma.ts
 import "dotenv/config";
 // 👇 IMPORTANTE: Ya no es '@prisma/client', es la ruta que definiste en el schema
-import { PrismaClient } from "../../generated/prisma/client";
+import { PrismaClient } from "@prisma/client";
 
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
 

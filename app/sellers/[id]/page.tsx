@@ -90,7 +90,7 @@ export default async function SellerProfilePage(props: {
                       className="object-cover hover:scale-105 transition-transform duration-300"
                     />
                   </div>
-                  <div className="p-4 flex flex-col flex-grow">
+                  <div className="p-4 flex flex-col grow">
                     <h3 className="font-bold text-[#283618]">
                       {product.title}
                     </h3>
@@ -98,7 +98,7 @@ export default async function SellerProfilePage(props: {
                       ${product.price.toFixed(2)}
                     </p>
                     <NextLink
-                      href={`/marketplace/${product.id}`} // Adjusted to marketplace route
+                      href={`/product/${product.id}`} // Adjusted to marketplace route
                       className="mt-auto block w-full text-center py-2 bg-[#BC6C25] text-white rounded-lg text-sm font-medium hover:bg-[#a05b1f] transition-colors"
                     >
                       Ver Detalles

@@ -1,12 +1,12 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// =====================================================================
+// CONFIGURACIÓN
+// =====================================================================
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
+  // IMPORTANTE: Dejamos esto comentado para que use la ruta estándar (node_modules).
+  // Esto soluciona el error: "@prisma/client did not initialize yet"
+  // output   = "../generated/prisma/client"
 }
 
 datasource db {
@@ -14,94 +14,106 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-/**
- * Product model mapping the frontend requirements to a robust database structure.
- */
+// =====================================================================
+// MODELOS DE NEGOCIO (PRODUCTOS Y VENDEDORES)
+// =====================================================================
+
 model Product {
-  // MongoDB uses @db.ObjectId for unique identifiers
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String
-  description String? // Added for more details
+  description String?
   price       Float
   category    String
   image       String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  // Relationship to Seller
-  sellerId String @db.ObjectId
-  seller   Seller @relation(fields: [sellerId], references: [id])
+  // Relación con el Vendedor
+  sellerId    String   @db.ObjectId
+  seller      Seller   @relation(fields: [sellerId], references: [id])
 
-  @@map("products") // This names the collection 'products' in MongoDB
+  // Relación con Reviews (Soluciona problemas de relaciones inversas)
+  reviews     Review[]
+
+  // Relación con CartItems (Para saber en qué carritos está este producto)
+  cartItems   CartItem[]
+
+  @@map("products")
 }
 
-/**
- * Seller model mapping the frontend requirements for an artisan's profile.
- * Includes fields for the hero banner and profile photo as seen in the UI.
- */
 model Seller {
-  id           String  @id @default(auto()) @map("_id") @db.ObjectId
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
   name         String
-  bio          String? // A short description of the artisan
-  profileImage String // The circular profile photo
-  heroBanner   String // The large banner image used in cards/profile
-  category     String // e.g., "Cerámica", "Textiles"
+  bio          String?
+  profileImage String
+  heroBanner   String
+  category     String
   email        String
 
-  // Relations
-  products Product[] // Link to the products this artisan creates
+  // Relación con Productos
+  products     Product[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   @@map("sellers")
 }
 
-// ... (Your existing generator, datasource, and Product model remain here) ...
-
-// =====================================================================
-// AUTHENTICATION MODELS (NextAuth.js v5 Adapter)
-// =====================================================================
-
 /**
- * Represents a user in the system.
- * Can be created via Credentials (email/password) or OAuth (Google, etc.).
+ * Review model - ratings and comments for products
+ * Soluciona el error: "Cannot read properties of undefined (reading 'findMany')"
  */
+model Review {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relación con User
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Relación con Product
+  productId String   @db.ObjectId
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("reviews")
+}
+
+// =====================================================================
+// MODELOS DE AUTENTICACIÓN (NextAuth.js)
+// =====================================================================
+
 model User {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
   email         String?   @unique
   emailVerified DateTime?
   image         String?
-  password      String? // Optional: Only required for Credentials login
-  role          Role      @default(USER) // RBAC: Role-Based Access Control
+  password      String?
+  role          Role      @default(USER)
 
-  // Relations
-  accounts Account[]
-  sessions Session[]
-  cart     Cart?
+  // Relaciones
+  accounts      Account[]
+  sessions      Session[]
+  
+  // Soluciona el error: "Invalid invocation... include: { cart: ... }"
+  cart          Cart?
+  
+  reviews       Review[]
 
-  // Timestamps
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
   @@map("users")
 }
 
-/**
- * Defines the user roles for authorization.
- * BEST PRACTICE: Use Enums for strict typing in TypeScript.
- */
 enum Role {
   USER
   ADMIN
 }
 
-/**
- * Represents an OAuth account linked to a User.
- * Example: A user's Google connection details.
- * Managed automatically by NextAuth.
- */
 model Account {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
   userId            String  @db.ObjectId
@@ -122,25 +134,17 @@ model Account {
   @@map("accounts")
 }
 
-/**
- * Represents an active user session.
- * Used for database-based session strategies.
- */
 model Session {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   sessionToken String   @unique
   userId       String   @db.ObjectId
   expires      DateTime
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("sessions")
 }
 
-/**
- * Stores tokens for email verification and password resets.
- * The strict composite unique constraint ensures security.
- */
 model VerificationToken {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   identifier String
@@ -151,30 +155,35 @@ model VerificationToken {
   @@map("verification_tokens")
 }
 
-/**
- * Cart model - one cart per user
- */
-model Cart {
-  id     String     @id @default(auto()) @map("_id") @db.ObjectId
-  userId String     @unique @db.ObjectId
-  user   User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  items  CartItem[]
+// =====================================================================
+// MODELOS DE E-COMMERCE (CARRITO)
+// =====================================================================
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Cart {
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String     @unique @db.ObjectId
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  items     CartItem[]
+
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 
   @@map("carts")
 }
 
-/**
- * CartItem model - individual items in a cart
- */
 model CartItem {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  cartId    String  @db.ObjectId
-  cart      Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
-  productId String  @db.ObjectId
-  quantity  Int     @default(1)
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  
+  // Relación con el Carrito
+  cartId    String   @db.ObjectId
+  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  
+  // Relación con el Producto
+  productId String   @db.ObjectId
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  quantity  Int      @default(1)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
