@@ -56,7 +56,7 @@ export default async function Page({ params }: { params: { id: string } }) {
             <div className={styles.creator}>
               <img
                 src={
-                  product.seller?.profileImage || "/images/default-avatar.png"
+                  product.seller?.profileImage || "/images/default-avatar.webp"
                 }
                 alt={product.seller?.name || "Artesano"}
                 className={styles.avatar}
@@ -81,7 +81,7 @@ export default async function Page({ params }: { params: { id: string } }) {
             {/* Reseña de ejemplo estática */}
             <div className={styles.creator}>
               <img
-                src="/images/carlos_profile.png"
+                src="/images/carlos_profile.webp"
                 alt="Author"
                 className={styles.avatar}
               />

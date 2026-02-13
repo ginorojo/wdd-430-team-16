@@ -46,7 +46,7 @@ export default function ProductCard({ data }: { data: Product }) {
         <div className="flex items-center justify-start gap-2 border-t border-gray-100 pt-3">
           <div className="relative w-6 h-6 rounded-full overflow-hidden">
             <Image
-              src={data.seller?.profileImage || "/images/default-avatar.png"}
+              src={data.seller?.profileImage || "/images/default-avatar.webp"}
               alt={data.seller?.name || "Artesano"}
               fill
               className="object-cover"

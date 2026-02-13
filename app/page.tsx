@@ -16,7 +16,7 @@ const HomePage = async () => {
         {/* Background Image Container */}
         <div className="absolute inset-0 z-0">
           <img
-            src="/images/hero.jpg"
+            src="/images/hero.webp"
             alt="Local artisans at work"
             className="w-full h-full object-cover"
           />
