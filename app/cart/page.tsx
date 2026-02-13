@@ -3,6 +3,7 @@ import Image from "next/image";
 import styles from "../page-01.module.css";
 import { getCart, clearCart } from "@/features/cart/actions";
 import { getProductById } from "@/features/products/queries";
+import Link from "next/link";
 import CartItemControls from "./CartItemControls";
 
 export const dynamic = "force-dynamic";
@@ -116,9 +117,12 @@ export default async function CartPage() {
                 Vaciar carrito
               </button>
             </form>
-            <button className="px-4 py-2 bg-green-600 text-white rounded">
+            <Link
+              href="/checkout"
+              className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors inline-block text-center"
+            >
               Proceder al pago
-            </button>
+            </Link>
           </div>
         </div>
       </div>
