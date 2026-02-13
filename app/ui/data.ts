@@ -7,7 +7,7 @@ export const products = [
     author: "Aleiana Cormeltin",
     category: "Cerámica",
     // Jarrón de cerámica tonos tierra
-    image: "/marketplace/adorno.png",
+    image: "/marketplace/adorno.webp",
     authorImage: "https://randomuser.me/api/portraits/women/44.jpg"
   },
   {
@@ -17,7 +17,7 @@ export const products = [
     author: "Matura Gomel",
     category: "Cerámica",
     // Cerámica blanca texturizada
-    image:"/marketplace/tazas.png ",
+    image:"/marketplace/tazas.webp ",
     authorImage: "https://randomuser.me/api/portraits/women/68.jpg"
   },
 
@@ -29,7 +29,7 @@ export const products = [
     author: "Elsho Sandra",
     category: "Madera",
     // Cucharas de madera rústica
-    image: "/marketplace/tabla.png",
+    image: "/marketplace/tabla.webp",
     authorImage: "https://randomuser.me/api/portraits/men/32.jpg"
   },
   {
@@ -39,7 +39,7 @@ export const products = [
     author: "Davio Rossi",
     category: "Madera",
     // Cuencos apilados de madera
-    image: "/marketplace/banco.png",
+    image: "/marketplace/banco.webp",
     authorImage: "https://randomuser.me/api/portraits/men/45.jpg"
   },
 
@@ -51,7 +51,7 @@ export const products = [
     author: "Sara Jenkins",
     category: "Textiles",
     // Manta de lana doblada
-    image: "/marketplace/manta2.png",
+    image: "/marketplace/manta2.webp",
     authorImage: "https://randomuser.me/api/portraits/women/90.jpg"
   },
   {
@@ -61,7 +61,7 @@ export const products = [
     author: "Ana Silva",
     category: "Textiles",
     // Telas naturales
-    image: "/marketplace/manta.png",
+    image: "/marketplace/manta.webp",
     authorImage: "https://randomuser.me/api/portraits/women/22.jpg"
   },
 
@@ -73,7 +73,7 @@ export const products = [
     author: "Elena Joyas",
     category: "Joyería",
     // Joyería dorada minimalista
-    image: "/marketplace/collar.png",
+    image: "/marketplace/collar.webp",
     authorImage: "https://randomuser.me/api/portraits/women/33.jpg"
   },
   {
@@ -83,7 +83,7 @@ export const products = [
     author: "Marco Polo",
     category: "Joyería",
     // Anillos sobre tela
-    image: "/marketplace/anillo.png",
+    image: "/marketplace/anillo.webp",
     authorImage: "https://randomuser.me/api/portraits/men/11.jpg"
   },
 ];

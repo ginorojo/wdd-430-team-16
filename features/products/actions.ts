@@ -26,7 +26,7 @@ export async function createProduct(
     category: formData.get("category"),
     description: formData.get("description"),
     sellerId: formData.get("sellerId"),
-    image: "/placeholder.png", // We'll update this after saving the file
+    image: "/placeholder.webp", // We'll update this after saving the file
   };
 
   const result = ProductSchema.safeParse(rawData);
@@ -57,7 +57,7 @@ export async function createProduct(
         ...result.data,
         image: filename
           ? `/marketplace/${filename}`
-          : "/marketplace/placeholder.png",
+          : "/marketplace/placeholder.webp",
       },
     });
 
