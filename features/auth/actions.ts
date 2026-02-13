@@ -62,8 +62,21 @@ export async function registerUser(prevState: any, formData: FormData) {
       },
     });
 
+    if (role == "SELLER") {
+      await prisma.seller.create({
+        data: {
+          name,
+          email,
+          profileImage: "/images/default_pfp.jpg",
+          heroBanner: "/images/placeholder.png",
+          category: "Madera",
+        },
+      });
+    }
+
     return { success: "Account created! You can now log in." };
   } catch (error) {
+    console.log(error);
     // Generic error handler to prevent leaking sensitive DB errors to the client
     return { error: { root: ["Something went wrong. Please try again."] } };
   }
