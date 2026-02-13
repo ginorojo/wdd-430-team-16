@@ -23,7 +23,12 @@ import { prisma } from "@/app/lib/prisma";
 export async function registerUser(prevState: any, formData: FormData) {
   // 1. Validate form fields using Zod Schema
   // We convert formData to a plain object to validate it against the schema
-  const validation = RegisterSchema.safeParse(Object.fromEntries(formData));
+  const validation = RegisterSchema.safeParse({
+    name: formData.get("name"),
+    email: formData.get("email"),
+    password: formData.get("password"),
+    role: formData.get("role")?.toString(),
+  });
 
   // If validation fails, return the specific field errors to the UI
   if (!validation.success) {
@@ -31,7 +36,7 @@ export async function registerUser(prevState: any, formData: FormData) {
   }
 
   // Extract validated data
-  const { name, email, password } = validation.data;
+  const { name, email, password, role } = validation.data;
 
   try {
     // 2. Check for existing user
@@ -53,7 +58,7 @@ export async function registerUser(prevState: any, formData: FormData) {
         name,
         email,
         password: hashedPassword,
-        role: "USER", // Default role for new sign-ups
+        role,
       },
     });
 
