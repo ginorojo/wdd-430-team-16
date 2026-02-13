@@ -41,11 +41,11 @@ export default function ProductRow({ product }: { product: Product }) {
         <td className="p-4">
           <div className="w-12 h-12 rounded bg-gray-100 overflow-hidden border border-gray-200">
             <img
-              src={product.image || "/marketplace/placeholder.png"}
+              src={product.image || "/marketplace/placeholder.webp"}
               className="w-full h-full object-cover"
               alt={product.title}
               onError={(e) =>
-                (e.currentTarget.src = "/marketplace/placeholder.png")
+                (e.currentTarget.src = "/marketplace/placeholder.webp")
               }
             />
           </div>
@@ -81,11 +81,11 @@ export default function ProductRow({ product }: { product: Product }) {
           <div className="bg-white p-4 border-b border-gray-100 flex items-center gap-4">
             <div className="w-16 h-16 rounded bg-gray-100 overflow-hidden border border-gray-200 shrink-0">
               <img
-                src={product.image || "/marketplace/placeholder.png"}
+                src={product.image || "/marketplace/placeholder.webp"}
                 className="w-full h-full object-cover"
                 alt={product.title}
                 onError={(e) =>
-                  (e.currentTarget.src = "/marketplace/placeholder.png")
+                  (e.currentTarget.src = "/marketplace/placeholder.webp")
                 }
               />
             </div>
