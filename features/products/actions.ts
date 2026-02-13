@@ -26,7 +26,7 @@ export async function createProduct(
     category: formData.get("category"),
     description: formData.get("description"),
     sellerId: formData.get("sellerId"),
-    image: "/placeholder.jpg", // We'll update this after saving the file
+    image: "/placeholder.png", // We'll update this after saving the file
   };
 
   const result = ProductSchema.safeParse(rawData);

@@ -67,8 +67,8 @@ export async function registerUser(prevState: any, formData: FormData) {
         data: {
           name,
           email,
-          profileImage: "/images/default_pfp.jpg",
-          heroBanner: "/images/placeholder.png",
+          profileImage: "/images/default_pfp.webp",
+          heroBanner: "/images/placeholder.webp",
           category: "Madera",
         },
       });

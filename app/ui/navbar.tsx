@@ -41,7 +41,7 @@ export const Navbar = async () => {
       {/* --- LOGO SECTION --- */}
       <div className="flex items-center gap-2 sm:gap-3">
         <img
-          src="/images/logo.png"
+          src="/images/logo.webp"
           alt="Logo"
           className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
         />

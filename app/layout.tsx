@@ -23,7 +23,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} text-[#283618]`}>
+      <body className={`${inter.className} text-[#283618]`} suppressHydrationWarning>
         <Navbar />
 
         {/* Main Content Area */}
