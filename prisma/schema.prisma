@@ -114,6 +114,7 @@ model User {
 enum Role {
   USER
   ADMIN
+  SELLER
 }
 
 model Account {
