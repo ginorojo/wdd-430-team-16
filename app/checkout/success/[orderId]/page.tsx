@@ -137,14 +137,14 @@ export default async function SuccessPage({ params }: SuccessPageProps) {
                 {/* Footer Actions */}
                 <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
                     <Link
-                        href="/dashboard"
+                        href="/orders"
                         className="w-full sm:w-auto px-8 py-4 bg-gray-900 text-white font-bold rounded-xl hover:bg-gray-800 transition-colors flex items-center justify-center gap-2"
                     >
                         Ver mis pedidos
                         <ArrowRight className="w-4 h-4" />
                     </Link>
                     <Link
-                        href="/"
+                        href="/artisans"
                         className="w-full sm:w-auto px-8 py-4 bg-white text-gray-900 font-bold rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
                     >
                         <ShoppingBag className="w-4 h-4" />

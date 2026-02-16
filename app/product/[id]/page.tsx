@@ -54,7 +54,7 @@ const ProductPage = async ({ params }: ProductPageProps) => {
     notFound();
   }
 
-  const seller = (product as any).seller;
+  const seller = product.seller;
 
   return (
     <div className="bg-[#fcfbf7] min-h-screen lg:h-[calc(100vh-80px)] w-full flex items-center justify-center p-4 lg:p-8 overflow-hidden">

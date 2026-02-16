@@ -15,7 +15,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
   // Connects NextAuth to our Prisma Client (MongoDB)
   // This automatically creates Users and Accounts in the DB on login
-  adapter: PrismaAdapter(prisma),
+  adapter: PrismaAdapter(prisma) as any,
 
   session: { strategy: "jwt" },
 

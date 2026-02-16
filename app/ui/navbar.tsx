@@ -61,7 +61,7 @@ export const Navbar = async () => {
 
       {/* --- CONDITIONAL CENTER & RIGHT SECTIONS --- */}
       <NavbarControl
-        onboardingCompleted={(user as any)?.onboardingCompleted}
+        onboardingCompleted={user?.onboardingCompleted ?? false}
         isLoggedIn={!!user}
       >
         {/* --- DESKTOP NAVIGATION --- */}
@@ -71,7 +71,7 @@ export const Navbar = async () => {
           {user ? (
             <div className="flex items-center gap-4 border-l pl-6 border-gray-300">
               {/* Show profile/dashboard ONLY if onboarding is complete */}
-              {(user as any).onboardingCompleted && (
+              {user.onboardingCompleted && (
                 <Link
                   href={"/sellers/dashboard" as any}
                   className="group relative flex items-center gap-3 pl-1.5 pr-5 py-1.5 rounded-full bg-[#fdfaf3] hover:bg-white transition-all duration-500 shadow-[0_2px_10px_-3px_rgba(141,95,66,0.1)] hover:shadow-[0_8px_20px_-6px_rgba(141,95,66,0.15)] border border-[#DDA15E]/20"
@@ -98,7 +98,7 @@ export const Navbar = async () => {
                   {/* Identity Details */}
                   <div className="flex flex-col items-start">
                     <span className="text-[9px] uppercase tracking-[0.2em] text-[#BC6C25] font-black leading-none mb-0.5">
-                      {(user as any).role === "SELLER" ? "Artisan" : (user as any).role === "ADMIN" ? "Admin" : "Customer"}
+                      {user.role === "SELLER" ? "Artisan" : user.role === "ADMIN" ? "Admin" : "Customer"}
                     </span>
                     <span className="text-sm font-bold text-[#283618] leading-none">
                       {user.name?.split(" ")[0]}

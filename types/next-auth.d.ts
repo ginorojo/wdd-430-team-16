@@ -39,3 +39,13 @@ declare module "next-auth/jwt" {
     onboardingCompleted: boolean;
   }
 }
+
+declare module "next-auth/adapters" {
+  /**
+    * Extends the AdapterUser object used by the Prisma Adapter.
+    */
+  interface AdapterUser {
+    role: string;
+    onboardingCompleted: boolean;
+  }
+}
