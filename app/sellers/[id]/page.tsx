@@ -20,13 +20,23 @@ export default async function SellerProfilePage(props: {
     notFound();
   }
 
-  // 3. Logic: If the visitor is the owner of this profile, send them to the dashboard
-  if (session?.user?.email === seller.email) {
-    redirect("/sellers/dashboard" as any);
-  }
+  // 3. Logic: If the visitor is the owner, show an edit button
+  const isOwner = session?.user?.email === seller.email;
 
   return (
     <div className="min-h-screen bg-[#FEFAE0]">
+      {isOwner && (
+        <div className="bg-[#BC6C25] text-white py-3 px-4 text-center font-bold flex items-center justify-center gap-4 shadow-md sticky top-0 z-50">
+          <span>Esta es la vista pública de tu perfil</span>
+          <NextLink
+            href={"/sellers/dashboard" as any}
+            className="bg-white text-[#BC6C25] px-4 py-1 rounded-full text-sm hover:bg-opacity-90 transition-all"
+          >
+            Ir al Panel de Control
+          </NextLink>
+        </div>
+      )}
+
       {/* Hero Banner Section */}
       <div className="relative h-64 md:h-80 w-full">
         <Image

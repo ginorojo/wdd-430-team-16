@@ -33,10 +33,5 @@ export default function NavbarControl({
         return null; // This will hide the middle and right sections
     }
 
-    // Secondary logic: Hide links if onboarding is incomplete
-    if (isLoggedIn && !onboardingCompleted) {
-        return null; // Force focus on onboarding
-    }
-
     return <>{children}</>;
 }
