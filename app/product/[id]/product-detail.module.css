@@ -1,0 +1,176 @@
+/**
+ * @file product-detail.module.css
+ * @description Single-screen boutique layout. 3-column grid, no overall scroll.
+ */
+
+.wrapper {
+    background: #f7f3e7;
+    height: calc(100vh - 84px);
+    /* Subtracting estimated navbar height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow: hidden;
+}
+
+.container {
+    width: 100%;
+    max-width: 1400px;
+    height: 100%;
+    max-height: 720px;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr 1fr;
+    gap: 32px;
+    align-items: stretch;
+}
+
+/* --- COLUMN 1: IMAGE --- */
+.imageSection {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+}
+
+.mainImage {
+    object-fit: cover;
+}
+
+/* --- COLUMN 2: INFO --- */
+.infoSection {
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    justify-content: space-between;
+}
+
+.categoryBadge {
+    font-size: 9px;
+    font-weight: 800;
+    color: #bc6c25;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 4px;
+}
+
+.title {
+    font-size: 28px;
+    font-weight: 900;
+    color: #283618;
+    line-height: 1.1;
+    margin-bottom: 2px;
+}
+
+.price {
+    font-size: 18px;
+    font-weight: 600;
+    color: #606c38;
+}
+
+.divider {
+    height: 1px;
+    background: #f0ede7;
+    margin: 12px 0;
+}
+
+.descriptionBox {
+    margin-bottom: 12px;
+}
+
+.descriptionLabel {
+    font-size: 7px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #bc6c25;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.descriptionText {
+    font-size: 12px;
+    line-height: 1.5;
+    color: #4a5a3a;
+    opacity: 0.9;
+}
+
+.sellerBar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: #fdfaf3;
+    border-radius: 14px;
+    margin-top: 20px;
+}
+
+.sellerInfo h4 {
+    font-size: 8px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #bc6c25;
+    margin: 0;
+}
+
+.sellerInfo p {
+    font-size: 14px;
+    font-weight: 700;
+    color: #283618;
+    margin: 0;
+}
+
+.addButton {
+    background: #bc6c25;
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 800;
+    text-transform: uppercase;
+    cursor: pointer;
+    width: 100%;
+}
+
+/* --- COLUMN 3: REVIEWS (The only scrollable part) --- */
+.reviewsContent {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+    padding: 32px;
+    height: 100%;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #bc6c25 #fdfaf3;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+}
+
+.reviewsContent::-webkit-scrollbar {
+    width: 4px;
+}
+
+.reviewsContent::-webkit-scrollbar-thumb {
+    background: #bc6c25;
+    border-radius: 10px;
+}
+
+@media (max-width: 1100px) {
+    .wrapper {
+        height: auto;
+        overflow-y: auto;
+    }
+
+    .container {
+        grid-template-columns: 1fr 1fr;
+        max-height: none;
+        height: auto;
+    }
+
+    .reviewsContent {
+        grid-column: span 2;
+        max-height: 600px;
+    }
+}
