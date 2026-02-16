@@ -26,7 +26,7 @@ export async function createProduct(
     category: formData.get("category"),
     description: formData.get("description"),
     sellerId: formData.get("sellerId"),
-    image: "/placeholder.jpg", // We'll update this after saving the file
+    image: "/placeholder.webp", // We'll update this after saving the file
   };
 
   const result = ProductSchema.safeParse(rawData);
@@ -55,7 +55,9 @@ export async function createProduct(
     await prisma.product.create({
       data: {
         ...result.data,
-        image: `/marketplace/${filename}`,
+        image: filename
+          ? `/marketplace/${filename}`
+          : "/marketplace/placeholder.webp",
       },
     });
 
@@ -71,8 +73,10 @@ export async function createProduct(
  */
 export async function deleteProduct(productId: string) {
   try {
-    const product = await prisma.product.findUnique({ where: { id: productId } });
-    
+    const product = await prisma.product.findUnique({
+      where: { id: productId },
+    });
+
     if (product?.image && product.image.startsWith("/marketplace/")) {
       const filePath = path.join(process.cwd(), "public", product.image);
       await fs.unlink(filePath).catch(() => console.log("File already gone"));
@@ -92,7 +96,7 @@ export async function deleteProduct(productId: string) {
 export async function updateProduct(prevState: any, formData: FormData) {
   const id = formData.get("id") as string;
   const file = formData.get("imageFile") as File;
-  
+
   const data: any = {
     title: formData.get("title"),
     price: parseFloat(formData.get("price") as string),
@@ -104,7 +108,10 @@ export async function updateProduct(prevState: any, formData: FormData) {
     if (file && file.size > 0) {
       const buffer = Buffer.from(await file.arrayBuffer());
       const filename = `${Date.now()}-${file.name.replace(/\s+/g, "_")}`;
-      await fs.writeFile(path.join(process.cwd(), "public/marketplace", filename), buffer);
+      await fs.writeFile(
+        path.join(process.cwd(), "public/marketplace", filename),
+        buffer,
+      );
       data.image = `/marketplace/${filename}`;
     }
 
