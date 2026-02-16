@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import ShippingForm from './ShippingForm';
-import PaymentPlaceholder from './PaymentPlaceholder';
+import StripePaymentForm from './StripePaymentForm';
 import { ShippingAddress, processOrder, createPaymentIntent } from '@/features/checkout/actions';
 import { useRouter } from 'next/navigation';
 
@@ -21,41 +21,51 @@ type CheckoutStep = 'shipping' | 'payment';
 export default function CheckoutForm() {
     const [step, setStep] = useState<CheckoutStep>('shipping');
     const [shippingData, setShippingData] = useState<ShippingAddress | null>(null);
+    const [clientSecret, setClientSecret] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const router = useRouter();
 
     /**
      * Handles the submission of the shipping form.
-     * Moves the user to the payment step.
+     * Moves the user to the payment step and initializes the PaymentIntent.
      *
      * @param data - The validated shipping address.
      */
-    const handleShippingSubmit = (data: ShippingAddress) => {
+    const handleShippingSubmit = async (data: ShippingAddress) => {
         setShippingData(data);
-        setStep('payment');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setLoading(true);
+
+        try {
+            // Init Stripe Payment Intent
+            const result = await createPaymentIntent();
+            if ('error' in result) {
+                alert(result.error);
+                return;
+            }
+
+            setClientSecret(result.clientSecret);
+            setStep('payment');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        } catch (error) {
+            console.error("Error init payment:", error);
+            alert("No se pudo iniciar el pago. Intenta nuevamente.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     /**
-     * Handles the final payment processing.
-     * 1. Creates a payment intent (mock).
-     * 2. Processes the order with the saved shipping data.
-     * 3. Redirects the user on success.
+     * Callback for successful Stripe payment.
+     * Now we just need to save the order in our DB and clear the cart.
      */
-    const handlePayment = async () => {
+    const handlePaymentSuccess = async () => {
         if (!shippingData) return;
 
         setLoading(true);
         try {
-            // 1. Simulate Payment Intent Creation
-            // In a real app, you'd fetch the total from the server or pass it securely
-            const paymentIntent = await createPaymentIntent(5000); // Mock amount
-
-            if (!paymentIntent.clientSecret) {
-                throw new Error('Failed to init payment');
-            }
-
-            // 2. Process Order (this would usually happen after Stripe confirms payment via webhook or strict client confirmation)
+            // Payment is already confirmed by Stripe at this point.
+            // We process the order in our DB.
             const result = await processOrder(shippingData);
 
             if (result.success) {
@@ -63,12 +73,12 @@ export default function CheckoutForm() {
                 alert(`¡Orden procesada con éxito! ID: ${result.orderId}`);
                 router.push('/');
             } else {
-                alert(result.error || 'Error al procesar la orden');
+                alert(result.error || 'Error al guardar la orden');
             }
 
         } catch (error) {
             console.error(error);
-            alert('Error inesperado. Intenta nuevamente.');
+            alert('Error inesperado al finalizar la orden.');
         } finally {
             setLoading(false);
         }
@@ -96,10 +106,13 @@ export default function CheckoutForm() {
             </div>
 
             {step === 'shipping' && (
-                <ShippingForm onSubmit={handleShippingSubmit} initialData={shippingData || {}} />
+                <div className={loading ? 'opacity-50 pointer-events-none' : ''}>
+                    <ShippingForm onSubmit={handleShippingSubmit} initialData={shippingData || {}} />
+                    {loading && <p className="text-center mt-4 text-primary animate-pulse">Iniciando pago seguro...</p>}
+                </div>
             )}
 
-            {step === 'payment' && (
+            {step === 'payment' && clientSecret && (
                 <div className="animate-in fade-in slide-in-from-right-8 duration-500">
                     <div className="mb-4">
                         <button
@@ -117,7 +130,11 @@ export default function CheckoutForm() {
                         <p>{shippingData?.city}, {shippingData?.postalCode}, {shippingData?.country}</p>
                     </div>
 
-                    <PaymentPlaceholder onPay={handlePayment} loading={loading} />
+                    <StripePaymentForm
+                        clientSecret={clientSecret}
+                        onSuccess={handlePaymentSuccess}
+                        onError={(msg) => alert(msg)}
+                    />
                 </div>
             )}
         </div>

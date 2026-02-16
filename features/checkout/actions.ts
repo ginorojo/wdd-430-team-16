@@ -17,38 +17,86 @@ export interface ShippingAddress {
   country: string;
 }
 
-/**
- * Mock response interface for a Payment Intent.
- * In a real Stripe integration, this would come from the Stripe SDK.
- */
-export interface PaymentIntentResponse {
-  clientSecret: string;
-  id: string;
-}
+import Stripe from 'stripe';
+
+// Initialize Stripe
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: '2025-01-27.acacia', // Use latest stable version or match your dashboard
+});
 
 /**
- * Creates a mock Payment Intent for Stripe.
+ * Creates a real Stripe Payment Intent.
  *
  * @remarks
- * This function simulates the server-side creation of a Stripe PaymentIntent.
- * In a real application, you would:
- * 1. Calculate the total amount on the server (NEVER trust the client).
- * 2. Call `stripe.paymentIntents.create`.
- * 3. Return the `client_secret` to the frontend.
+ * 1. Verifies the user's session.
+ * 2. Calculates the total amount from the database (Cart).
+ * 3. Creates a PaymentIntent in Stripe.
+ * 4. Returns the client_secret to the frontend.
  *
- * @param amount - The total amount to charge (in cents).
- * @returns A promise resolving to a mock PaymentIntentResponse.
+ * @returns A promise resolving to the client secret and payment intent ID.
  */
-export async function createPaymentIntent(amount: number): Promise<PaymentIntentResponse> {
-  // Simulate network latency
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+export async function createPaymentIntent(): Promise<{ clientSecret: string; id: string } | { error: string }> {
+  try {
+    const session = await auth();
+    if (!session?.user?.email) {
+      return { error: 'No autenticado' };
+    }
 
-  console.log(`[Mock Stripe] Creating payment intent for amount: $${amount / 100}`);
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      include: {
+        cart: {
+          include: {
+            items: {
+              include: { product: true }
+            }
+          }
+        }
+      }
+    });
 
-  return {
-    id: `pi_mock_${Math.random().toString(36).substring(7)}`,
-    clientSecret: `sk_test_mock_secret_${Math.random().toString(36).substring(7)}`,
-  };
+    if (!user || !user.cart || user.cart.items.length === 0) {
+      return { error: 'Carrito vacío' };
+    }
+
+    // Calculate total on server side (critical security step)
+    const totalAmount = user.cart.items.reduce((sum, item) => {
+      return sum + (item.product.price * item.quantity);
+    }, 0);
+
+    // Mock shipping logic (must match frontend)
+    const shippingCost = totalAmount > 100 ? 0 : 15;
+    const finalAmount = totalAmount + shippingCost;
+    
+    // Convert to cents for Stripe
+    const amountInCents = Math.round(finalAmount * 100);
+
+    // Create PaymentIntent
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: amountInCents,
+      currency: 'usd', // Change to 'mxn' if needed
+      metadata: {
+        userId: user.id,
+        cartId: user.cart.id,
+      },
+      automatic_payment_methods: {
+        enabled: true,
+      },
+    });
+
+    if (!paymentIntent.client_secret) {
+      throw new Error('Error al generar client_secret de Stripe');
+    }
+
+    return {
+      id: paymentIntent.id,
+      clientSecret: paymentIntent.client_secret,
+    };
+
+  } catch (error) {
+    console.error('Error creating payment intent:', error);
+    return { error: 'Error al iniciar el pago con Stripe' };
+  }
 }
 
 /**
