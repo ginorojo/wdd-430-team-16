@@ -73,7 +73,7 @@ export default function CheckoutForm() {
 
             if (result.success && result.orderId) {
                 setA11yMessage('Orden guardada con éxito. Redirigiendo...');
-                router.push(`/checkout/success/${result.orderId}`);
+                router.push(`/checkout/success/${result.orderId}` as any);
             } else {
                 setLoading(false); // CRITICAL FIX: allow retry or show error
                 setA11yMessage(`Error: ${result.error || 'No se pudo guardar la orden'}`);

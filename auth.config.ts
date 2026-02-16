@@ -36,6 +36,14 @@ export const authConfig = {
       const user = auth?.user;
       const onboardingCompleted = user?.onboardingCompleted;
 
+      // --- 0. PUBLIC ROUTE WHITELIST (Performance & Safety) ---
+      // These routes are static and public. We verify them first to avoid 
+      // strict session checks or redirects clashing with rapid navigation.
+      const publicWhitelist = ["/about", "/artisans", "/sellers"]; 
+      if (publicWhitelist.some(path => nextUrl.pathname.startsWith(path))) {
+        return true; 
+      }
+
       // Diagnostic Log:
       if (isLoggedIn) {
         console.log(`[Middleware] User: ${user?.email} | Onboarding: ${onboardingCompleted} | Target: ${nextUrl.pathname}`);
@@ -51,7 +59,8 @@ export const authConfig = {
 
       // --- 2. GLOBAL ONBOARDING ENFORCEMENT ---
       // Requirement: Users signed in via Social (Google) MUST pick a role before any other action.
-      if (isLoggedIn && !onboardingCompleted && !isOnOnboarding) {
+      // Exception: Allow access to /about without onboarding to prevent redirect loops.
+      if (isLoggedIn && !onboardingCompleted && !isOnOnboarding && !nextUrl.pathname.startsWith("/about")) {
         console.log(`[AuthGuard] Redirecting ${user?.email} to Onboarding`);
         return Response.redirect(new URL("/onboarding", nextUrl));
       }

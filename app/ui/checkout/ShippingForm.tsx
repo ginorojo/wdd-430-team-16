@@ -64,8 +64,8 @@ export default function ShippingForm({ onSubmit, initialData }: ShippingFormProp
         if (!result.success) {
             // Map Zod errors to state
             const newErrors: Record<string, string> = {};
-            const issues = result.error.issues || result.error.errors; // Fallback to be safe
-            issues.forEach((err: any) => {
+            const issues = result.error.issues;
+            issues.forEach((err) => {
                 if (err.path[0]) {
                     newErrors[err.path[0] as string] = err.message;
                 }

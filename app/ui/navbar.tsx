@@ -138,7 +138,7 @@ export const Navbar = async () => {
           {/* CART (Hidden for Guests to reduce clutter if requested) */}
           {user && (
             <Link
-              href="/cart"
+              href={"/cart" as any}
               className="relative p-2 hover:bg-black/5 rounded-full transition-colors group"
               aria-label={`Carrito de compras, ${itemCount} productos`}
             >

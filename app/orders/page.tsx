@@ -21,7 +21,7 @@ export default async function OrdersPage() {
 
     if ('error' in result) {
         if (result.error === 'Authentication required') {
-            redirect('/login?callbackUrl=/orders');
+            redirect('/login?callbackUrl=/orders' as any);
         }
 
         return (

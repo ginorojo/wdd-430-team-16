@@ -15,7 +15,7 @@ export default async function SellerDashboard() {
   const session = await auth();
 
   if (!session?.user?.email) {
-    redirect("/login");
+    redirect("/login" as any);
   }
 
   const seller = await prisma.seller.findFirst({

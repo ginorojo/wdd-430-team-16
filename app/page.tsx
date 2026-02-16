@@ -83,7 +83,7 @@ const HomePage = async () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {artisans.map((artisan) => (
               <Link
-                href={`/sellers/${artisan.id}`}
+                href={`/sellers/${artisan.id}` as any}
                 key={artisan.id}
                 className="transition-transform duration-300 hover:-translate-y-2"
               >

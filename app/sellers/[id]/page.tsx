@@ -22,7 +22,7 @@ export default async function SellerProfilePage(props: {
 
   // 3. Logic: If the visitor is the owner of this profile, send them to the dashboard
   if (session?.user?.email === seller.email) {
-    redirect("/sellers/dashboard");
+    redirect("/sellers/dashboard" as any);
   }
 
   return (
@@ -98,7 +98,7 @@ export default async function SellerProfilePage(props: {
                       ${product.price.toFixed(2)}
                     </p>
                     <NextLink
-                      href={`/product/${product.id}`} // Adjusted to marketplace route
+                      href={`/product/${product.id}` as any} // Adjusted to marketplace route
                       className="mt-auto block w-full text-center py-2 bg-[#BC6C25] text-white rounded-lg text-sm font-medium hover:bg-[#a05b1f] transition-colors"
                     >
                       Ver Detalles

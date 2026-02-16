@@ -33,7 +33,7 @@ export default function ProductCard({ data }: { data: Product }) {
       {/* Info Producto */}
       <div className="flex-1">
         <Link
-          href={`/product/${data.id}`}
+          href={`/product/${data.id}` as any}
           className="block group/link outline-none"
           aria-label={`Ver detalles de ${data.title}, precio $${data.price.toFixed(2)}`}
         >
@@ -48,7 +48,7 @@ export default function ProductCard({ data }: { data: Product }) {
 
       {/* Info Autor */}
       <Link
-        href={`/sellers/${data.sellerId}`}
+        href={`/sellers/${data.sellerId}` as any}
         className="transition-transform duration-300 hover:-translate-y-1 mt-auto outline-none focus:ring-2 focus:ring-primary rounded-lg p-1"
         aria-label={`Ver perfil del artesano ${data.seller?.name || 'Artesano'}`}
       >

@@ -27,7 +27,7 @@ export default async function CheckoutPage() {
 
     // 1. Potect Route
     if (!session?.user?.email) {
-        redirect('/api/auth/signin?callbackUrl=/checkout');
+        redirect('/api/auth/signin?callbackUrl=/checkout' as any);
     }
 
     // 2. Fetch Data
@@ -83,7 +83,7 @@ export default async function CheckoutPage() {
                     {/* Left Column: Forms */}
                     <div className="lg:col-span-7 space-y-8">
                         <div className="flex items-center gap-2 mb-6">
-                            <Link href="/cart" className="text-sm text-gray-500 hover:text-gray-900 flex items-center gap-1">
+                            <Link href={"/cart" as any} className="text-sm text-gray-500 hover:text-gray-900 flex items-center gap-1">
                                 <ArrowLeft className="w-4 h-4" />
                                 Volver al carrito
                             </Link>
