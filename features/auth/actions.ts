@@ -59,6 +59,7 @@ export async function registerUser(prevState: any, formData: FormData) {
         email,
         password: hashedPassword,
         role,
+        onboardingCompleted: true,
       },
     });
 
@@ -137,5 +138,76 @@ export async function loginUser(prevState: any, formData: FormData) {
  * to Google's consent screen.
  */
 export async function loginGoogle() {
-  await signIn("google", { redirectTo: "/" });
+  await signIn("google", { redirectTo: "/onboarding" });
+}
+
+/**
+ * Handles the completion of the onboarding process for social login users.
+ * 
+ * Logic Breakdown:
+ * 1. Verification: Asserts that a valid session exists.
+ * 2. Database Update: Assigns the selected Role and marks onboarding as done.
+ * 3. Business Logic: If the user is an Artisan (SELLER), it initializes their store profile.
+ * 4. Cache Management: Triggers path revalidation to update global UI state.
+ * 
+ * @param role - The identity the user chose during onboarding.
+ * @returns Status object used by the client UI.
+ */
+export async function completeOnboarding(role: "USER" | "SELLER") {
+  try {
+    const { auth } = await import("@/auth");
+    const sessionData = await auth();
+
+    // Guard: Ensure user is actually authenticated
+    if (!sessionData?.user?.email) {
+      return { error: "Authorization failed. Please sign in again." };
+    }
+
+    const email = sessionData.user.email;
+    console.log(`[Auth] User ${email} completed onboarding as ${role}`);
+
+    // Phase 1: Persistence
+    // Mark the user as 'onboarded' to unlock the rest of the application
+    const updatedUser = await prisma.user.update({
+      where: { email },
+      data: {
+        role,
+        onboardingCompleted: true,
+      },
+    });
+
+    // Phase 2: Artisan Provisioning
+    // If the user is a Seller, we must ensure they have a linked 'Seller' document
+    if (role === "SELLER") {
+      const existingSeller = await prisma.seller.findFirst({
+        where: { email }
+      });
+
+      if (!existingSeller) {
+        await prisma.seller.create({
+          data: {
+            name: updatedUser.name || "Newly Joined Artisan",
+            email: updatedUser.email!,
+            profileImage: updatedUser.image || "/images/default_pfp.webp",
+            heroBanner: "/images/placeholder.webp",
+            category: "General", // Default assignment
+            bio: "Welcome to my creative space! I'm excited to share my hand-crafted work with you.",
+          },
+        });
+      }
+    }
+
+    // Phase 3: Cache Invalidation
+    // Ensures the Middleware and Layouts fetch the fresh session data on the next request.
+    const { revalidatePath } = await import("next/cache");
+    revalidatePath("/");
+
+    return { 
+      success: true, 
+      user: { role, onboardingCompleted: true } 
+    };
+  } catch (error) {
+    console.error("[Fatal] Onboarding Action Failed:", error);
+    return { error: "A server-side error occurred while updating your profile. Check the terminal for details." };
+  }
 }

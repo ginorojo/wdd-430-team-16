@@ -87,13 +87,17 @@ model Review {
 // =====================================================================
 
 model User {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  password      String?
-  role          Role      @default(USER)
+  id                  String    @id @default(auto()) @map("_id") @db.ObjectId
+  name                String?
+  email               String?   @unique
+  emailVerified       DateTime?
+  image               String?
+  password            String?
+  role                Role      @default(USER)
+  /**
+   * Tracks if the user has completed the initial role selection (Customer vs Artisan)
+   */
+  onboardingCompleted Boolean   @default(false)
 
   // Relaciones
   accounts Account[]

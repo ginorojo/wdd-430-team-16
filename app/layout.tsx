@@ -8,6 +8,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "./ui/navbar";
+import { Providers } from "./Providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -67,38 +68,40 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es">
+    <html lang="es" suppressHydrationWarning>
       <body className={`${inter.className} text-[#283618] selection:bg-primary/30`} suppressHydrationWarning>
-        {/* Accessibility skip link */}
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-6 focus:py-3 focus:bg-white focus:text-primary focus:rounded-xl focus:shadow-2xl focus:font-bold focus:outline-none focus:ring-2 focus:ring-primary"
-        >
-          Saltar al contenido principal
-        </a>
+        <Providers>
+          {/* Accessibility skip link */}
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-6 focus:py-3 focus:bg-white focus:text-primary focus:rounded-xl focus:shadow-2xl focus:font-bold focus:outline-none focus:ring-2 focus:ring-primary"
+          >
+            Saltar al contenido principal
+          </a>
 
-        <header>
-          <Navbar />
-        </header>
+          <header>
+            <Navbar />
+          </header>
 
-        {/* Main Content Area */}
-        <main id="main-content" className="min-h-screen outline-none" tabIndex={-1}>
-          {children}
-        </main>
+          {/* Main Content Area */}
+          <main id="main-content" className="min-h-screen outline-none" tabIndex={-1}>
+            {children}
+          </main>
 
-        {/* Footer Section */}
-        <footer className="bg-[#E6DAB5] text-[#1F1F1F] py-16 px-4">
-          <div className="max-w-7xl mx-auto text-center">
-            <h2 className="text-xl font-bold mb-4">Artisanal Refuge</h2>
-            <p className="max-w-md mx-auto text-gray-700 mb-8">
-              Conectando el talento local con el mundo, de forma artesanal y sostenible.
-            </p>
-            <div className="w-full h-px bg-black/10 mb-8" />
-            <p className="text-sm opacity-60">
-              © 2026 Artisanal Refuge. Todos los derechos reservados.
-            </p>
-          </div>
-        </footer>
+          {/* Footer Section */}
+          <footer className="bg-[#E6DAB5] text-[#1F1F1F] py-16 px-4">
+            <div className="max-w-7xl mx-auto text-center">
+              <h2 className="text-xl font-bold mb-4">Artisanal Refuge</h2>
+              <p className="max-w-md mx-auto text-gray-700 mb-8">
+                Conectando el talento local con el mundo, de forma artesanal y sostenible.
+              </p>
+              <div className="w-full h-px bg-black/10 mb-8" />
+              <p className="text-sm opacity-60">
+                © 2026 Artisanal Refuge. Todos los derechos reservados.
+              </p>
+            </div>
+          </footer>
+        </Providers>
       </body>
     </html>
   );
