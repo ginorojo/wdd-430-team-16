@@ -2,8 +2,8 @@ import React from "react";
 import Image from "next/image";
 
 export const metadata = {
-  title: "Sobre Nosotros | Handcrafted Haven",
-  description: "Conoce al equipo de desarrolladores Full Stack detrás de Handcrafted Haven.",
+  title: "Sobre Nosotros | Artisanal Refuge",
+  description: "Conoce al equipo de desarrolladores Full Stack detrás de Artisanal Refuge.",
 };
 
 export default function About() {
@@ -11,7 +11,7 @@ export default function About() {
     <main className="flex flex-col gap-12 py-12 min-h-screen bg-[#F9F4EC] px-8 text-gray-800 font-sans">
       <section className="max-w-4xl mx-auto text-center flex flex-col gap-6">
         <h1 className="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight">
-          Detrás de Handcrafted Haven
+          Detrás de Artisanal Refuge
         </h1>
 
         <div className="flex flex-col gap-4 text-lg leading-relaxed text-gray-800">

@@ -15,26 +15,23 @@ export const Navbar = async () => {
     cart?.items?.reduce((s, it) => s + (it.quantity || 0), 0) || 0;
 
   // Reusable Navigation Links
+  const navigation = [
+    { label: "Explorar", href: "/artisans" },
+    { label: "Artesanos", href: "/sellers" },
+    { label: "Sobre Nosotros", href: "/about" },
+  ];
+
   const NavLinks = () => (
     <>
-      <Link
-        href={"/artisans" as any}
-        className="hover:text-[#BC6C25] text-foreground transition-colors py-2 lg:py-0"
-      >
-        Explore
-      </Link>
-      <Link
-        href={"/sellers" as any}
-        className="hover:text-[#BC6C25] text-foreground transition-colors py-2 lg:py-0"
-      >
-        Artisans
-      </Link>
-      <Link
-        href={"/about" as any}
-        className="hover:text-[#BC6C25] text-foreground transition-colors py-2 lg:py-0"
-      >
-        About us
-      </Link>
+      {navigation.map((link) => (
+        <Link
+          key={link.href}
+          href={link.href as any}
+          className="hover:text-[#BC6C25] text-foreground transition-colors py-2 lg:py-0"
+        >
+          {link.label}
+        </Link>
+      ))}
     </>
   );
 
