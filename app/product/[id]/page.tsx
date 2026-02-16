@@ -26,14 +26,14 @@ export async function generateMetadata(
   const { id } = await params;
   const product = await getProductById(id);
 
-  if (!product) return {};
+  if (!product) return { title: "Producto no encontrado" };
 
   return {
-    title: product.title,
-    description: product.description || `Buy ${product.title} at Artisanal Refuge. Unique hand-crafted pieces.`,
+    title: `${product.title} | Artisanal Refuge`,
+    description: product.description || `Adquiere ${product.title} en Artisanal Refuge. Piezas artesanales únicas hechas a mano.`,
     openGraph: {
-      title: product.title,
-      description: product.description,
+      title: `${product.title} | Artisanal Refuge`,
+      description: product.description || `Adquiere ${product.title} en Artisanal Refuge.`,
       images: [{ url: product.image }],
     },
   };

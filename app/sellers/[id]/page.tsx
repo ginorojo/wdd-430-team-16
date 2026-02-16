@@ -3,6 +3,21 @@ import { getSellerWithProducts } from "@/features/sellers/queries";
 import { auth } from "@/auth"; // Import your auth utility
 import NextLink from "next/link";
 import Image from "next/image";
+import { Metadata } from "next";
+
+export async function generateMetadata(props: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const params = await props.params;
+  const seller = await getSellerWithProducts(params.id);
+
+  if (!seller) return { title: "Artesano no encontrado" };
+
+  return {
+    title: `${seller.name} | Perfil de Artesano`,
+    description: seller.bio || `Descubre las creaciones únicas de ${seller.name} en Artisanal Refuge.`,
+  };
+}
 
 export default async function SellerProfilePage(props: {
   params: Promise<{ id: string }>;

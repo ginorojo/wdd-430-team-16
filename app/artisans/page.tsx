@@ -2,6 +2,12 @@ import { DM_Sans } from "next/font/google";
 import Sidebar from "../ui/artisans/Sidebar";
 import ProductCard from "../ui/artisans/ProductCard";
 import { getProducts } from '@/features/products/queries';
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Explorar Productos | Artisanal Refuge",
+  description: "Explora nuestra colección de productos artesanales únicos: cerámica, madera, textiles y más.",
+};
 
 const dmSans = DM_Sans({ subsets: ["latin"], weight: ["400", "500", "700"] });
 

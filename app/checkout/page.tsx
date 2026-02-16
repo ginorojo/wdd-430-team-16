@@ -11,8 +11,8 @@ import { ArrowLeft } from 'lucide-react';
  * Metadata for the Checkout Page.
  */
 export const metadata = {
-    title: 'Checkout | Artesanías',
-    description: 'Proceso de pago seguro para tus productos artesanales.',
+    title: 'Finalizar Compra | Artisanal Refuge',
+    description: 'Proceso de pago seguro para tus piezas artesanales únicas.',
 };
 
 /**

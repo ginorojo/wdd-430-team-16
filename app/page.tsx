@@ -8,6 +8,12 @@ import ArtisanCard from "./ui/ArtisanCard";
 import { getBestSellers } from "@/features/sellers/queries";
 import Link from "next/link";
 import Image from "next/image";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Inicio | Artisanal Refuge",
+  description: "Descubre piezas únicas hechas a mano por artesanos locales. Conecta con la tradición y el arte.",
+};
 
 const HomePage = async () => {
   const artisans = await getBestSellers();

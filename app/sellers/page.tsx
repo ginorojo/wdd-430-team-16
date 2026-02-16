@@ -1,12 +1,12 @@
-/**
- * @file page.tsx
- * @description Home page that fetches artisan data directly from MongoDB using Prisma.
- */
-
 import { getSellers } from "@/features/sellers/queries";
 import ArtisanCard from "../ui/ArtisanCard";
-
 import Link from "next/link";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Nuestros Artesanos | Artisanal Refuge",
+  description: "Conoce a los maestros artesanos detrás de cada pieza única. Historias de tradición y talento.",
+};
 
 
 export default async function SellersPage() {

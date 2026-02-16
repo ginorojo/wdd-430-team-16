@@ -5,6 +5,12 @@ import { getCart, clearCart } from "@/features/cart/actions";
 import { getProductById } from "@/features/products/queries";
 import Link from "next/link";
 import CartItemControls from "./CartItemControls";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Mi Carrito | Artisanal Refuge",
+  description: "Tu selección de piezas artesanales únicas listas para ir a casa.",
+};
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
