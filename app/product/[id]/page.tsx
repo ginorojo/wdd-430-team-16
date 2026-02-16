@@ -11,8 +11,33 @@ import { notFound } from "next/navigation";
 import AddToCartForm from "./AddToCartForm";
 import ReviewSection from "./ReviewSection";
 
+import { ResolvingMetadata } from "next";
+
 interface ProductPageProps {
   params: Promise<{ id: string }>;
+}
+
+/**
+ * Dynamic Metadata for SEO
+ */
+export async function generateMetadata(
+  { params }: ProductPageProps,
+  parent: ResolvingMetadata
+): Promise<any> {
+  const { id } = await params;
+  const product = await getProductById(id);
+
+  if (!product) return {};
+
+  return {
+    title: product.title,
+    description: product.description || `Compra ${product.title} en Artisanal Refuge. Piezas únicas hechas a mano.`,
+    openGraph: {
+      title: product.title,
+      description: product.description,
+      images: [{ url: product.image }],
+    },
+  };
 }
 
 const ProductPage = async ({ params }: ProductPageProps) => {
@@ -25,6 +50,29 @@ const ProductPage = async ({ params }: ProductPageProps) => {
 
   return (
     <main className={styles.pageBackground}>
+      {/* JSON-LD Structured Data for Google Rich Snippets */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": product.title,
+            "image": product.image,
+            "description": product.description || "Pieza artesanal única",
+            "brand": {
+              "@type": "Brand",
+              "name": "Artisanal Refuge"
+            },
+            "offers": {
+              "@type": "Offer",
+              "price": product.price,
+              "priceCurrency": "USD",
+              "availability": "https://schema.org/InStock"
+            }
+          }),
+        }}
+      />
       <div className={styles.container}>
         <div className={styles.card}>
           <div className={styles.left}>

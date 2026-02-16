@@ -37,17 +37,18 @@ export const Navbar = async () => {
   );
 
   return (
-    <nav className="relative bg-[#F7F3E7] flex items-center justify-between px-4 sm:px-8 py-4 lg:py-6 border-b border-gray-100 shadow-sm">
+    <nav className="relative bg-[#F7F3E7] flex items-center justify-between px-4 sm:px-8 py-4 lg:py-6 border-b border-gray-100 shadow-sm" aria-label="Navegación principal">
       {/* --- LOGO SECTION --- */}
       <div className="flex items-center gap-2 sm:gap-3">
         <img
           src="/images/logo.webp"
-          alt="Logo"
+          alt="Artisanal Refuge Logo"
           className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
         />
         <Link
           href="/"
           className="font-bold text-lg sm:text-xl leading-tight tracking-tight text-[#c06941]"
+          aria-label="Artisanal Refuge - Ir al inicio"
         >
           Artisanal
           <br className="hidden sm:block" /> Refuge
@@ -61,8 +62,15 @@ export const Navbar = async () => {
         {user ? (
           <div className="flex items-center gap-4 border-l pl-6 border-gray-300">
             <Link
+              href="/orders"
+              className="hover:text-[#BC6C25] text-[#283618] transition-colors"
+            >
+              Mis Pedidos
+            </Link>
+            <Link
               href="/sellers/dashboard"
               className="flex items-center gap-2 text-[#c06941]"
+              aria-label="Mi perfil y panel de control"
             >
               <User size={20} />
               <span className="text-sm font-semibold truncate max-w-25">
@@ -77,9 +85,9 @@ export const Navbar = async () => {
             >
               <button
                 type="submit"
-                className="flex items-center gap-2 text-sm text-red-600 font-semibold"
+                className="flex items-center gap-2 text-sm text-red-600 font-semibold hover:bg-red-50 px-3 py-2 rounded-lg transition-colors"
               >
-                Logout <LogOut size={18} />
+                Cerrar sesión <LogOut size={18} />
               </button>
             </form>
           </div>
@@ -98,11 +106,12 @@ export const Navbar = async () => {
         {/* CART (Always visible) */}
         <Link
           href="/cart"
-          className="relative p-2 hover:bg-black/5 rounded-full transition-colors"
+          className="relative p-2 hover:bg-black/5 rounded-full transition-colors group"
+          aria-label={`Carrito de compras, ${itemCount} productos`}
         >
-          <ShoppingCart size={24} className="text-[#283618]" />
+          <ShoppingCart size={24} className="text-[#283618] group-hover:scale-110 transition-transform" />
           {itemCount > 0 && (
-            <span className="absolute top-0 right-0 bg-red-600 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center">
+            <span className="absolute top-0 right-0 bg-red-600 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center animate-in zoom-in">
               {itemCount}
             </span>
           )}
@@ -115,6 +124,12 @@ export const Navbar = async () => {
             <div className="border-t border-gray-200 pt-4 flex flex-col gap-4">
               {user ? (
                 <>
+                  <Link
+                    href="/orders"
+                    className="text-[#283618] font-bold py-2"
+                  >
+                    Mis Pedidos
+                  </Link>
                   <Link
                     href="/sellers/dashboard"
                     className="flex items-center gap-2 text-[#c06941] font-bold"
@@ -129,7 +144,7 @@ export const Navbar = async () => {
                   >
                     <button
                       type="submit"
-                      className="flex items-center gap-2 text-red-600 font-bold"
+                      className="flex items-center gap-2 text-red-600 font-bold w-full text-left"
                     >
                       Logout <LogOut size={18} />
                     </button>

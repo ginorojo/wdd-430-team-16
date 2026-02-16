@@ -12,13 +12,13 @@ interface ArtisanProps {
 
 const ArtisanCard = ({ bannerSrc, profileSrc, name, specialty }: ArtisanProps) => {
   return (
-    <div className="flex flex-col items-center bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow pb-6">
+    <article className="flex flex-col items-center bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow pb-6 group focus-within:ring-2 focus-within:ring-primary h-full">
       {/* 1. Banner Image Container */}
-      <div className="relative w-full h-48 bg-gray-200">
+      <div className="relative w-full h-48 bg-gray-200 overflow-hidden">
         <img
           src={bannerSrc}
-          alt={`${name} workshop`}
-          className="w-full h-full object-cover"
+          alt={`Taller de ${name}`}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
         />
       </div>
 
@@ -27,7 +27,7 @@ const ArtisanCard = ({ bannerSrc, profileSrc, name, specialty }: ArtisanProps) =
         <div className="w-20 h-20 rounded-full border-4 border-white overflow-hidden bg-gray-300 shadow-sm">
           <img
             src={profileSrc}
-            alt={name}
+            alt={`Foto de perfil de ${name}`}
             className="w-full h-full object-cover"
           />
         </div>
@@ -35,14 +35,14 @@ const ArtisanCard = ({ bannerSrc, profileSrc, name, specialty }: ArtisanProps) =
 
       {/* 3. Artisan Name */}
       <div className="mt-3 text-center px-4">
-        <h3 className="text-[#283618] font-bold text-lg leading-tight">
+        <h3 className="text-[#283618] font-bold text-lg leading-tight group-hover:text-primary transition-colors">
           {name}
         </h3>
-        <p className="text-[#283618] text-md leading-tight">
+        <p className="text-[#283618] text-md leading-tight opacity-70">
           {specialty}
         </p>
       </div>
-    </div>
+    </article>
   );
 };
 
