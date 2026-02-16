@@ -35,15 +35,20 @@ const HomePage = async () => {
 
         {/* Content (Front) */}
         <div className="relative z-10 max-w-2xl">
-          <h1 className="text-4xl md:text-6xl font-bold leading-tight text-[#F7F3E7] drop-shadow-sm">
-            Discover local artisans, <br />
-            connect with them
+          <h1 className="text-4xl md:text-6xl font-black leading-tight text-[#F7F3E7] drop-shadow-lg tracking-tight">
+            Descubre artesanos locales,<br />
+            conecta con la tradición
           </h1>
+          <p className="text-[#F7F3E7]/90 text-lg mt-6 font-medium max-w-lg">
+            Piezas únicas hechas a mano con el alma de nuestra tierra.
+          </p>
 
-          {/* Optional: Add a call to action button since it's a hero section */}
-          <button className="mt-8 bg-[#BC6C25] text-white px-8 py-3 rounded-md font-semibold hover:bg-[#a05b1f] transition-colors">
-            Explore Now
-          </button>
+          <Link
+            href="/artisans"
+            className="mt-10 inline-block bg-[#BC6C25] text-white px-10 py-4 rounded-full font-black hover:bg-[#a05b1f] transition-all shadow-xl shadow-black/20 active:scale-95"
+          >
+            Explorar Colecciones
+          </Link>
         </div>
       </section>
 

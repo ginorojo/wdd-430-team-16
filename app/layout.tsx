@@ -70,6 +70,28 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <body className={`${inter.className} text-[#283618] selection:bg-primary/30`} suppressHydrationWarning>
+        {/* JSON-LD Global: Organization */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Artisanal Refuge",
+              "url": "https://artisanal-refuge.vercel.app",
+              "logo": "https://artisanal-refuge.vercel.app/images/logo.webp",
+              "sameAs": [
+                "https://facebook.com/artisanalrefuge",
+                "https://instagram.com/artisanalrefuge"
+              ],
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+52-xxx-xxx-xxxx",
+                "contactType": "customer service"
+              }
+            }),
+          }}
+        />
         <Providers>
           {/* Accessibility skip link */}
           <a
