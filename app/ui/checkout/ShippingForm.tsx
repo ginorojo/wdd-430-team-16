@@ -41,7 +41,7 @@ export default function ShippingForm({ onSubmit, initialData }: ShippingFormProp
         address: initialData?.address || '',
         city: initialData?.city || '',
         postalCode: initialData?.postalCode || '',
-        country: initialData?.country || 'México', // Default to probable user location
+        country: initialData?.country || 'USA', // Default to probable user location
     });
 
     const [errors, setErrors] = useState<Partial<Record<keyof ShippingAddress, string>>>({});
@@ -78,75 +78,157 @@ export default function ShippingForm({ onSubmit, initialData }: ShippingFormProp
         onSubmit(result.data);
     };
 
-    /**
-     * Helper to render an input field with standard styling and error handling.
-     */
-    const renderInput = (name: keyof ShippingAddress, label: string, placeholder?: string, type: string = 'text') => (
-        <div className="col-span-1">
-            <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">
-                {label}
-            </label>
-            <input
-                type={type}
-                id={name}
-                name={name}
-                value={formData[name]}
-                onChange={handleChange}
-                placeholder={placeholder}
-                className={`w-full px-4 py-3 rounded-xl border ${errors[name] ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-200 focus:border-primary focus:ring-1 focus:ring-primary'
-                    } bg-white outline-none transition-all placeholder:text-gray-400`}
-            />
-            {errors[name] && (
-                <p className="mt-1 text-xs text-red-500">{errors[name]}</p>
-            )}
-        </div>
-    );
-
     return (
-        <form onSubmit={handleSubmit} className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="bg-white p-8 rounded-2xl border border-gray-200 shadow-sm space-y-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-6">Dirección de Envío</h2>
+        <form
+            onSubmit={handleSubmit}
+            className="space-y-6"
+            noValidate
+            aria-labelledby="shipping-form-title"
+        >
+            <h2 id="shipping-form-title" className="text-2xl font-bold text-gray-900 mb-8 sm:text-3xl">
+                ¿A dónde enviamos tu pedido?
+            </h2>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {renderInput('firstName', 'Nombre', 'Juan')}
-                    {renderInput('lastName', 'Apellido', 'Pérez')}
+            <fieldset className="space-y-4 border-none p-0 m-0">
+                <legend className="sr-only">Información de contacto y envío</legend>
 
-                    <div className="md:col-span-2">
-                        {renderInput('address', 'Dirección', 'Calle Principal 123, Col. Centro')}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <label htmlFor="firstName" className="block text-sm font-semibold text-gray-700">
+                            Nombre
+                        </label>
+                        <input
+                            id="firstName"
+                            type="text"
+                            name="firstName"
+                            value={formData.firstName}
+                            onChange={handleChange}
+                            aria-invalid={!!errors.firstName}
+                            aria-describedby={errors.firstName ? "firstName-error" : undefined}
+                            className={`w-full px-4 py-3 rounded-xl border ${errors.firstName ? 'border-red-500 focus:ring-red-500 shadow-[0_0_0_1px_rgba(239,68,68,1)]' : 'border-gray-300 focus:ring-primary'} focus:outline-none focus:ring-2 transition-all bg-white text-gray-900 group`}
+                            placeholder="Ej. Juan"
+                            required
+                        />
+                        {errors.firstName && (
+                            <p id="firstName-error" role="alert" className="text-red-600 text-xs font-medium mt-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
+                                <span aria-hidden="true">⚠️</span> {errors.firstName}
+                            </p>
+                        )}
                     </div>
 
-                    {renderInput('city', 'Ciudad', 'Ciudad de México')}
-                    {renderInput('postalCode', 'Código Postal', '06000')}
+                    <div className="space-y-2">
+                        <label htmlFor="lastName" className="block text-sm font-semibold text-gray-700">
+                            Apellido
+                        </label>
+                        <input
+                            id="lastName"
+                            type="text"
+                            name="lastName"
+                            value={formData.lastName}
+                            onChange={handleChange}
+                            aria-invalid={!!errors.lastName}
+                            aria-describedby={errors.lastName ? "lastName-error" : undefined}
+                            className={`w-full px-4 py-3 rounded-xl border ${errors.lastName ? 'border-red-500 focus:ring-red-500 shadow-[0_0_0_1px_rgba(239,68,68,1)]' : 'border-gray-300 focus:ring-primary'} focus:outline-none focus:ring-2 transition-all bg-white text-gray-900`}
+                            placeholder="Ej. Pérez"
+                            required
+                        />
+                        {errors.lastName && (
+                            <p id="lastName-error" role="alert" className="text-red-600 text-xs font-medium mt-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
+                                <span aria-hidden="true">⚠️</span> {errors.lastName}
+                            </p>
+                        )}
+                    </div>
+                </div>
 
-                    <div className="col-span-1 md:col-span-2">
-                        <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-1">
+                <div className="space-y-2">
+                    <label htmlFor="address" className="block text-sm font-semibold text-gray-700">
+                        Dirección completa
+                    </label>
+                    <input
+                        id="address"
+                        type="text"
+                        name="address"
+                        value={formData.address}
+                        onChange={handleChange}
+                        aria-invalid={!!errors.address}
+                        aria-describedby={errors.address ? "address-error" : undefined}
+                        className={`w-full px-4 py-3 rounded-xl border ${errors.address ? 'border-red-500 focus:ring-red-500 shadow-[0_0_0_1px_rgba(239,68,68,1)]' : 'border-gray-300 focus:ring-primary'} focus:outline-none focus:ring-2 transition-all bg-white text-gray-900`}
+                        placeholder="Calle, número, colonia..."
+                        required
+                    />
+                    {errors.address && (
+                        <p id="address-error" role="alert" className="text-red-600 text-xs font-medium mt-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
+                            <span aria-hidden="true">⚠️</span> {errors.address}
+                        </p>
+                    )}
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    <div className="col-span-1 space-y-2">
+                        <label htmlFor="city" className="block text-sm font-semibold text-gray-700">
+                            Ciudad
+                        </label>
+                        <input
+                            id="city"
+                            type="text"
+                            name="city"
+                            value={formData.city}
+                            onChange={handleChange}
+                            aria-invalid={!!errors.city}
+                            aria-describedby={errors.city ? "city-error" : undefined}
+                            className={`w-full px-4 py-3 rounded-xl border ${errors.city ? 'border-red-500 focus:ring-red-500 shadow-[0_0_0_1px_rgba(239,68,68,1)]' : 'border-gray-300 focus:ring-primary'} focus:outline-none focus:ring-2 transition-all bg-white text-gray-900`}
+                            required
+                        />
+                        {errors.city && <p id="city-error" role="alert" className="text-red-600 text-xs font-medium mt-1">{errors.city}</p>}
+                    </div>
+
+                    <div className="col-span-1 space-y-2">
+                        <label htmlFor="postalCode" className="block text-sm font-semibold text-gray-700">
+                            C.P.
+                        </label>
+                        <input
+                            id="postalCode"
+                            type="text"
+                            name="postalCode"
+                            value={formData.postalCode}
+                            onChange={handleChange}
+                            aria-invalid={!!errors.postalCode}
+                            aria-describedby={errors.postalCode ? "postalCode-error" : undefined}
+                            className={`w-full px-4 py-3 rounded-xl border ${errors.postalCode ? 'border-red-500 focus:ring-red-500 shadow-[0_0_0_1px_rgba(239,68,68,1)]' : 'border-gray-300 focus:ring-primary'} focus:outline-none focus:ring-2 transition-all bg-white text-gray-900`}
+                            required
+                        />
+                        {errors.postalCode && <p id="postalCode-error" role="alert" className="text-red-600 text-xs font-medium mt-1">{errors.postalCode}</p>}
+                    </div>
+
+                    <div className="col-span-2 sm:col-span-1 space-y-2">
+                        <label htmlFor="country" className="block text-sm font-semibold text-gray-700">
                             País
                         </label>
                         <select
-                            name="country"
                             id="country"
+                            name="country"
                             value={formData.country}
                             onChange={handleChange}
-                            className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-gray-700"
+                            className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-primary focus:outline-none bg-white text-gray-900 shadow-sm"
+                            aria-required="true"
                         >
+                            <option value="USA">USA</option>
                             <option value="México">México</option>
-                            <option value="Estados Unidos">Estados Unidos</option>
                             <option value="Canadá">Canadá</option>
-                            <option value="Colombia">Colombia</option>
                             <option value="España">España</option>
                         </select>
                     </div>
                 </div>
+            </fieldset>
 
-                <div className="pt-4">
-                    <button
-                        type="submit"
-                        className="w-full md:w-auto bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 px-8 rounded-xl transition-colors shadow-md hover:shadow-lg active:scale-95 transform duration-150"
-                    >
-                        Continuar al Pago
-                    </button>
-                </div>
-            </div>
+            <button
+                type="submit"
+                className="w-full mt-8 bg-primary hover:bg-opacity-90 text-white font-bold py-4 px-6 rounded-xl transition-all transform active:scale-[0.98] shadow-lg hover:shadow-xl sm:text-lg flex items-center justify-center gap-2 group"
+                aria-label="Continuar al paso de pago"
+            >
+                Continuar al pago
+                <span className="group-hover:translate-x-1 transition-transform">→</span>
+            </button>
         </form>
     );
 }

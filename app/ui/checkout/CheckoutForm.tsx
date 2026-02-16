@@ -23,20 +23,18 @@ export default function CheckoutForm() {
     const [shippingData, setShippingData] = useState<ShippingAddress | null>(null);
     const [clientSecret, setClientSecret] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    const [a11yMessage, setA11yMessage] = useState('');
     const router = useRouter();
+    const titleRef = React.useRef<HTMLHeadingElement>(null);
 
     /**
      * Handles the submission of the shipping form.
-     * Moves the user to the payment step and initializes the PaymentIntent.
-     *
-     * @param data - The validated shipping address.
      */
     const handleShippingSubmit = async (data: ShippingAddress) => {
         setShippingData(data);
         setLoading(true);
 
         try {
-            // Init Stripe Payment Intent
             const result = await createPaymentIntent();
             if ('error' in result) {
                 alert(result.error);
@@ -45,7 +43,13 @@ export default function CheckoutForm() {
 
             setClientSecret(result.clientSecret);
             setStep('payment');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setA11yMessage('Envío guardado. Ahora ingresa tus datos de pago.');
+
+            // Focus management: Move focus to the top of the payment section
+            setTimeout(() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                titleRef.current?.focus();
+            }, 100);
 
         } catch (error) {
             console.error("Error init payment:", error);
@@ -57,77 +61,100 @@ export default function CheckoutForm() {
 
     /**
      * Callback for successful Stripe payment.
-     * Now we just need to save the order in our DB and clear the cart.
      */
     const handlePaymentSuccess = async () => {
         if (!shippingData) return;
 
         setLoading(true);
+        setA11yMessage('Pago confirmado por Stripe. Guardando tu orden...');
+
         try {
-            // Payment is already confirmed by Stripe at this point.
-            // We process the order in our DB.
             const result = await processOrder(shippingData);
 
-            if (result.success) {
-                // Success! Redirect to home or a success page
-                alert(`¡Orden procesada con éxito! ID: ${result.orderId}`);
-                router.push('/');
+            if (result.success && result.orderId) {
+                setA11yMessage('Orden guardada con éxito. Redirigiendo...');
+                router.push(`/checkout/success/${result.orderId}`);
             } else {
-                alert(result.error || 'Error al guardar la orden');
+                setLoading(false); // CRITICAL FIX: allow retry or show error
+                setA11yMessage(`Error: ${result.error || 'No se pudo guardar la orden'}`);
+                alert(result.error || 'Error al guardar la orden en la base de datos. Por favor, contacta a soporte.');
             }
 
         } catch (error) {
             console.error(error);
-            alert('Error inesperado al finalizar la orden.');
-        } finally {
             setLoading(false);
+            setA11yMessage('Error inesperado al procesar la orden.');
+            alert('Error inesperado al finalizar la orden.');
         }
     };
 
     return (
         <div className="space-y-8">
-            {/* Steps Indicator */}
-            <div className="flex items-center justify-center space-x-4 mb-8">
-                <div className={`flex items-center space-x-2 ${step === 'shipping' ? 'text-primary font-bold' : 'text-gray-400'}`}>
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 ${step === 'shipping' || step === 'payment' ? 'border-primary bg-primary text-white' : 'border-gray-300'}`}>
-                        1
-                    </div>
-                    <span>Envío</span>
-                </div>
-                <div className="w-16 h-[2px] bg-gray-200">
-                    <div className={`h-full bg-primary transition-all duration-300 ${step === 'payment' ? 'w-full' : 'w-0'}`} />
-                </div>
-                <div className={`flex items-center space-x-2 ${step === 'payment' ? 'text-primary font-bold' : 'text-gray-400'}`}>
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 ${step === 'payment' ? 'border-primary bg-primary text-white' : 'border-gray-300'}`}>
-                        2
-                    </div>
-                    <span>Pago</span>
-                </div>
+            {/* Hidden accessibility announcer */}
+            <div className="sr-only" role="status" aria-live="polite">
+                {a11yMessage}
             </div>
 
+            {/* Steps Indicator (Progress Bar) */}
+            <nav aria-label="Progreso del checkout" className="mb-12">
+                <div className="flex items-center justify-center space-x-4 max-w-sm mx-auto">
+                    <div className={`flex flex-col items-center gap-2 ${step === 'shipping' ? 'text-primary font-bold' : 'text-gray-400'}`}>
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-colors ${step === 'shipping' || step === 'payment' ? 'border-primary bg-primary text-white' : 'border-gray-200'}`}>
+                            1
+                        </div>
+                        <span className="text-xs uppercase tracking-wider">Envío</span>
+                    </div>
+                    <div className="flex-1 h-px bg-gray-200 relative top-[-10px]">
+                        <div className={`h-full bg-primary transition-all duration-500 ${step === 'payment' ? 'w-full' : 'w-0'}`} />
+                    </div>
+                    <div className={`flex flex-col items-center gap-2 ${step === 'payment' ? 'text-primary font-bold' : 'text-gray-400'}`}>
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-colors ${step === 'payment' ? 'border-primary bg-primary text-white' : 'border-gray-200'}`}>
+                            2
+                        </div>
+                        <span className="text-xs uppercase tracking-wider">Pago</span>
+                    </div>
+                </div>
+            </nav>
+
             {step === 'shipping' && (
-                <div className={loading ? 'opacity-50 pointer-events-none' : ''}>
+                <div
+                    className={`transition-opacity duration-300 ${loading ? 'opacity-50 pointer-events-none' : ''}`}
+                    aria-busy={loading}
+                >
                     <ShippingForm onSubmit={handleShippingSubmit} initialData={shippingData || {}} />
-                    {loading && <p className="text-center mt-4 text-primary animate-pulse">Iniciando pago seguro...</p>}
+                    {loading && (
+                        <div className="fixed inset-0 bg-white/60 flex items-center justify-center z-50 backdrop-blur-sm">
+                            <div className="flex flex-col items-center gap-4">
+                                <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+                                <p className="text-primary font-bold animate-pulse">Iniciando pago seguro...</p>
+                            </div>
+                        </div>
+                    )}
                 </div>
             )}
 
             {step === 'payment' && clientSecret && (
                 <div className="animate-in fade-in slide-in-from-right-8 duration-500">
-                    <div className="mb-4">
+                    <div className="mb-6">
                         <button
                             onClick={() => setStep('shipping')}
-                            className="text-sm text-gray-500 hover:text-gray-900 flex items-center gap-1"
+                            className="text-sm text-gray-500 hover:text-primary flex items-center gap-2 py-2 px-1 transition-colors group"
+                            aria-label="Volver a editar la información de envío"
                         >
-                            ← Volver a editar envío
+                            <span className="group-hover:-translate-x-1 transition-transform">←</span>
+                            Volver a editar envío
                         </button>
                     </div>
 
-                    <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-6 text-sm text-gray-700">
-                        <p className="font-bold mb-1">Enviando a:</p>
-                        <p>{shippingData?.firstName} {shippingData?.lastName}</p>
-                        <p>{shippingData?.address}</p>
-                        <p>{shippingData?.city}, {shippingData?.postalCode}, {shippingData?.country}</p>
+                    <div className="bg-blue-50/50 p-6 rounded-2xl border border-blue-100 mb-8 text-sm shadow-sm">
+                        <h3 ref={titleRef} tabIndex={-1} className="font-bold text-blue-900 mb-2 outline-none">
+                            Enviando a:
+                        </h3>
+                        <p className="text-blue-800 leading-relaxed">
+                            {shippingData?.firstName} {shippingData?.lastName}<br />
+                            {shippingData?.address}<br />
+                            {shippingData?.city}, {shippingData?.postalCode}, {shippingData?.country}
+                        </p>
                     </div>
 
                     <StripePaymentForm
