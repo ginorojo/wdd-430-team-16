@@ -38,6 +38,18 @@ export const authConfig = {
       // 4. Allow access to all other pages (Home, About, etc.)
       return true;
     },
+    jwt({ token, user }) {
+      if (user) {
+        token.role = (user as any).role;
+      }
+      return token;
+    },
+    session({ session, token }) {
+      if (session.user) {
+        (session.user as any).role = token.role;
+      }
+      return session;
+    },
   },
   providers: [], // Providers are in auth.ts
 } satisfies NextAuthConfig;

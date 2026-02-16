@@ -7,6 +7,7 @@ import React from "react";
 import ArtisanCard from "./ui/ArtisanCard";
 import { getBestSellers } from "@/features/sellers/queries";
 import Link from "next/link";
+import Image from "next/image";
 
 const HomePage = async () => {
   const artisans = await getBestSellers();
@@ -15,10 +16,12 @@ const HomePage = async () => {
       <section className="relative h-125 w-full flex items-center px-10 md:px-20 overflow-hidden">
         {/* Background Image Container */}
         <div className="absolute inset-0 z-0">
-          <img
+          <Image
             src="/images/hero.webp"
             alt="Local artisans at work"
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
+            priority
           />
           {/* Optional: Dark overlay to ensure text readability */}
           <div className="absolute inset-0 bg-black/20" />
@@ -55,8 +58,13 @@ const HomePage = async () => {
               key={item.name}
               className="flex flex-col items-center group cursor-pointer"
             >
-              <div className="w-40 h-40 bg-gray-200 rounded-full flex items-center justify-center mb-4 border-4 border-transparent group-hover:border-[#DDA15E] transition-all">
-                <img src={`/images/${item.picture}`} alt={item.name} />
+              <div className="relative w-40 h-40 bg-gray-200 rounded-full flex items-center justify-center mb-4 border-4 border-transparent group-hover:border-[#DDA15E] transition-all overflow-hidden">
+                <Image
+                  src={`/images/${item.picture}`}
+                  alt={item.name}
+                  fill
+                  className="object-cover p-2"
+                />
               </div>
               <h3 className="text-xl font-semibold text-[#606C38]">
                 {item.name}

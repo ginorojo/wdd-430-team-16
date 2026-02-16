@@ -2,6 +2,7 @@ import styles from "../../page-01.module.css";
 import { getProductById } from "@/features/products/queries";
 // Importamos notFound para manejar errores de Next.js correctamente
 import { notFound } from "next/navigation";
+import Image from "next/image";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const { id } = params;
@@ -20,10 +21,13 @@ export default async function Page({ params }: { params: { id: string } }) {
       <div className={styles.container}>
         <div className={styles.card}>
           <div className={styles.left}>
-            <img
+            <Image
               src={product.image}
               alt={product.title}
+              width={600}
+              height={600}
               className={styles.mainImage}
+              style={{ objectFit: "cover" }}
             />
           </div>
 
@@ -54,12 +58,15 @@ export default async function Page({ params }: { params: { id: string } }) {
 
             {/* 3. Corrección de Propiedades: Usamos el objeto 'seller' */}
             <div className={styles.creator}>
-              <img
+              <Image
                 src={
                   product.seller?.profileImage || "/images/default-avatar.webp"
                 }
                 alt={product.seller?.name || "Artesano"}
+                width={64}
+                height={64}
                 className={styles.avatar}
+                style={{ objectFit: "cover" }}
               />
               <div>
                 <p className={styles.creatorBy}>
@@ -80,10 +87,13 @@ export default async function Page({ params }: { params: { id: string } }) {
 
             {/* Reseña de ejemplo estática */}
             <div className={styles.creator}>
-              <img
+              <Image
                 src="/images/carlos_profile.webp"
                 alt="Author"
+                width={48}
+                height={48}
                 className={styles.avatar}
+                style={{ objectFit: "cover" }}
               />
               <div>
                 <p className={styles.opinionGiver}>Carlos</p>

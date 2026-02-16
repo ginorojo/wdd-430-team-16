@@ -32,7 +32,7 @@ export default function AddToCartForm({ productId, styles }: AddToCartFormProps)
     if (result.error) {
       setMessage({ type: 'error', text: result.error });
       if (result.error.includes('iniciar sesión')) {
-        setTimeout(() => router.push('/login'), 2000);
+        setTimeout(() => router.push('/login' as any), 2000);
       }
     } else if (result.success) {
       setMessage({ type: 'success', text: result.message || 'Producto agregado al carrito' });
@@ -59,7 +59,7 @@ export default function AddToCartForm({ productId, styles }: AddToCartFormProps)
             </button>
             <input
               type="number"
-              className="w-16 text-center py-2 border-x border-gray-300 text-gray-900 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50"
+              className="w-16 text-center py-2 border-x border-gray-300 text-gray-900 font-medium focus:outline-none focus:ring-2 focus:ring-primary/40 disabled:bg-gray-50"
               value={quantity}
               onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
               aria-label="cantidad"
@@ -79,7 +79,7 @@ export default function AddToCartForm({ productId, styles }: AddToCartFormProps)
         </div>
       </div>
 
-      <button 
+      <button
         className={`${styles.addButton} disabled:opacity-50 disabled:cursor-not-allowed`}
         onClick={handleAddToCart}
         disabled={loading}
@@ -88,12 +88,11 @@ export default function AddToCartForm({ productId, styles }: AddToCartFormProps)
       </button>
 
       {message && (
-        <div 
-          className={`p-3 rounded text-sm mt-3 ${
-            message.type === 'success' 
-              ? 'bg-green-100 text-green-700' 
-              : 'bg-red-100 text-red-700'
-          }`}
+        <div
+          className={`p-3 rounded text-sm mt-3 ${message.type === 'success'
+            ? 'bg-green-100 text-green-700'
+            : 'bg-red-100 text-red-700'
+            }`}
         >
           {message.text}
         </div>

@@ -1,6 +1,7 @@
 import { getOrderById } from '@/features/checkout/actions';
 import { CheckCircle2, Package, MapPin, CreditCard, ArrowRight, ShoppingBag } from 'lucide-react';
 import Link from 'next/link';
+import Image from "next/image";
 import { notFound } from 'next/navigation';
 
 interface SuccessPageProps {
@@ -60,10 +61,12 @@ export default async function SuccessPage({ params }: SuccessPageProps) {
                                 <div key={item.id} className="flex items-center justify-between py-2">
                                     <div className="flex items-center gap-4">
                                         {item.productImage && (
-                                            <img
+                                            <Image
                                                 src={item.productImage}
                                                 alt=""
-                                                className="w-12 h-12 object-cover rounded-lg bg-gray-100"
+                                                width={48}
+                                                height={48}
+                                                className="rounded-lg bg-gray-100 object-cover"
                                             />
                                         )}
                                         <div>

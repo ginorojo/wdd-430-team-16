@@ -1,7 +1,6 @@
 import React from 'react';
 import { getUserOrders } from '@/features/orders/actions';
 import OrdersList from '@/app/ui/orders/OrdersList';
-import { ShoppingBag, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
@@ -15,11 +14,12 @@ export const metadata = {
  * 
  * Server-side page to show the list of orders for the current user.
  */
+import OrderCartTabs from '@/app/ui/cart/OrderCartTabs';
+
 export default async function OrdersPage() {
     const result = await getUserOrders();
 
     if ('error' in result) {
-        // Redirigir al login si no está autenticado
         if (result.error === 'Authentication required') {
             redirect('/login?callbackUrl=/orders');
         }
@@ -35,9 +35,12 @@ export default async function OrdersPage() {
     const orders = result.orders || [];
 
     return (
-        <main className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8 animate-in fade-in duration-700" id="main-content">
+        <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8 animate-in fade-in duration-700">
             <div className="max-w-4xl mx-auto">
-                <header className="mb-12 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                {/* TABS NAVIGATION */}
+                <OrderCartTabs />
+
+                <header className="mb-6">
                     {/* JSON-LD for Order History */}
                     <script
                         type="application/ld+json"
@@ -50,27 +53,21 @@ export default async function OrdersPage() {
                             }),
                         }}
                     />
-                    <div>
-                        <Link
-                            href="/"
-                            className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-primary mb-4 transition-colors group"
-                        >
-                            <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-                            Regresar a la tienda
-                        </Link>
-                        <h1 className="text-4xl font-black text-gray-900 tracking-tight flex items-center gap-3">
+                    <div className="flex items-center gap-3">
+                        <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
                             Mis Pedidos
-                            <span className="text-lg font-medium text-gray-400 bg-gray-100 px-3 py-1 rounded-full">
-                                {orders.length}
-                            </span>
                         </h1>
+                        <span className="bg-gray-100 text-gray-500 px-2.5 py-0.5 rounded-full text-xs font-bold border border-gray-200">
+                            {orders.length}
+                        </span>
                     </div>
+                    <p className="text-gray-500 text-sm mt-1">Revisa el estado y detalles de tus piezas adquiridas.</p>
                 </header>
 
                 <div className="space-y-8">
                     <OrdersList orders={orders} />
                 </div>
             </div>
-        </main>
+        </div>
     );
 }
