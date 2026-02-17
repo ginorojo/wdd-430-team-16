@@ -59,10 +59,10 @@ const HomePage = async () => {
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {[
-            { name: "Cerámica", picture: "ceramics.png" },
-            { name: "Madera", picture: "wood.png" },
-            { name: "Textiles", picture: "textiles.png" },
-            { name: "Joyería", picture: "jewelry.png" },
+            { name: "Cerámica", picture: "ceramics.webp" },
+            { name: "Madera", picture: "wood.webp" },
+            { name: "Textiles", picture: "textiles.webp" },
+            { name: "Joyería", picture: "jewelry.webp" },
           ].map((item) => (
             <Link
               href={`/artisans?category=${item.name}`}
