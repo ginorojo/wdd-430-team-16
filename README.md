@@ -62,3 +62,10 @@ We are a group of 5 students collaborating on this project.
 
 ### Meeting Schedule:
 * **Time:** Fridays 02:00 (UTC-0)
+
+Usa la tarjeta de prueba de Stripe:
+Número: 4242 4242 4242 4242
+Expiración: 12/34
+CVC: 123
+ZIP: 12345
+Dale a "Pagar Ahora". Debería procesarse el pago y guardarse la orden en tu base de datos.

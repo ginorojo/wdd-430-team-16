@@ -7,6 +7,13 @@ import React from "react";
 import ArtisanCard from "./ui/ArtisanCard";
 import { getBestSellers } from "@/features/sellers/queries";
 import Link from "next/link";
+import Image from "next/image";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Inicio | Artisanal Refuge",
+  description: "Descubre piezas únicas hechas a mano por artesanos locales. Conecta con la tradición y el arte.",
+};
 
 const HomePage = async () => {
   const artisans = await getBestSellers();
@@ -15,10 +22,12 @@ const HomePage = async () => {
       <section className="relative h-125 w-full flex items-center px-10 md:px-20 overflow-hidden">
         {/* Background Image Container */}
         <div className="absolute inset-0 z-0">
-          <img
+          <Image
             src="/images/hero.webp"
             alt="Local artisans at work"
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
+            priority
           />
           {/* Optional: Dark overlay to ensure text readability */}
           <div className="absolute inset-0 bg-black/20" />
@@ -26,15 +35,20 @@ const HomePage = async () => {
 
         {/* Content (Front) */}
         <div className="relative z-10 max-w-2xl">
-          <h1 className="text-4xl md:text-6xl font-bold leading-tight text-[#F7F3E7] drop-shadow-sm">
-            Discover local artisans, <br />
-            connect with them
+          <h1 className="text-4xl md:text-6xl font-black leading-tight text-[#F7F3E7] drop-shadow-lg tracking-tight">
+            Descubre artesanos locales,<br />
+            conecta con la tradición
           </h1>
+          <p className="text-[#F7F3E7]/90 text-lg mt-6 font-medium max-w-lg">
+            Piezas únicas hechas a mano con el alma de nuestra tierra.
+          </p>
 
-          {/* Optional: Add a call to action button since it's a hero section */}
-          <button className="mt-8 bg-[#BC6C25] text-white px-8 py-3 rounded-md font-semibold hover:bg-[#a05b1f] transition-colors">
-            Explore Now
-          </button>
+          <Link
+            href="/artisans"
+            className="mt-10 inline-block bg-[#BC6C25] text-white px-10 py-4 rounded-full font-black hover:bg-[#a05b1f] transition-all shadow-xl shadow-black/20 active:scale-95"
+          >
+            Explorar Colecciones
+          </Link>
         </div>
       </section>
 
@@ -55,8 +69,13 @@ const HomePage = async () => {
               key={item.name}
               className="flex flex-col items-center group cursor-pointer"
             >
-              <div className="w-40 h-40 bg-gray-200 rounded-full flex items-center justify-center mb-4 border-4 border-transparent group-hover:border-[#DDA15E] transition-all">
-                <img src={`/images/${item.picture}`} alt={item.name} />
+              <div className="relative w-40 h-40 bg-gray-200 rounded-full flex items-center justify-center mb-4 border-4 border-transparent group-hover:border-[#DDA15E] transition-all overflow-hidden">
+                <Image
+                  src={`/images/${item.picture}`}
+                  alt={item.name}
+                  fill
+                  className="object-cover p-2"
+                />
               </div>
               <h3 className="text-xl font-semibold text-[#606C38]">
                 {item.name}
@@ -75,7 +94,7 @@ const HomePage = async () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {artisans.map((artisan) => (
               <Link
-                href={`/sellers/${artisan.id}`}
+                href={`/sellers/${artisan.id}` as any}
                 key={artisan.id}
                 className="transition-transform duration-300 hover:-translate-y-2"
               >

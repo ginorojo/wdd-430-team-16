@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 
 import { useState } from "react";
 import { Edit, Trash2, AlertTriangle } from "lucide-react";
@@ -40,13 +41,12 @@ export default function ProductRow({ product }: { product: Product }) {
       <tr className="hidden md:table-row hover:bg-gray-50 transition-colors border-b border-gray-100">
         <td className="p-4">
           <div className="w-12 h-12 rounded bg-gray-100 overflow-hidden border border-gray-200">
-            <img
+            <Image
               src={product.image || "/marketplace/placeholder.webp"}
               className="w-full h-full object-cover"
+              width={48}
+              height={48}
               alt={product.title}
-              onError={(e) =>
-                (e.currentTarget.src = "/marketplace/placeholder.webp")
-              }
             />
           </div>
         </td>
@@ -80,13 +80,12 @@ export default function ProductRow({ product }: { product: Product }) {
         <td colSpan={5} className="p-0">
           <div className="bg-white p-4 border-b border-gray-100 flex items-center gap-4">
             <div className="w-16 h-16 rounded bg-gray-100 overflow-hidden border border-gray-200 shrink-0">
-              <img
+              <Image
                 src={product.image || "/marketplace/placeholder.webp"}
                 className="w-full h-full object-cover"
+                width={64}
+                height={64}
                 alt={product.title}
-                onError={(e) =>
-                  (e.currentTarget.src = "/marketplace/placeholder.webp")
-                }
               />
             </div>
 

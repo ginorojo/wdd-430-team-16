@@ -1,12 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import { DM_Sans } from "next/font/google";
-
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  variable: "--font-dm-sans",
-});
 
 export const metadata = {
   title: "Sobre Nosotros | Handcrafted Haven",
@@ -15,14 +8,12 @@ export const metadata = {
 
 export default function About() {
   return (
-    <main
-      className={`flex flex-col gap-12 py-12 min-h-screen bg-[#F9F4EC] px-8 text-gray-800 ${dmSans.className}`}
-    >
+    <main className="flex flex-col gap-12 py-12 min-h-screen bg-[#F9F4EC] px-8 text-gray-800 font-sans">
       <section className="max-w-4xl mx-auto text-center flex flex-col gap-6">
         <h1 className="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight">
           Detrás de Handcrafted Haven
         </h1>
-        
+
         <div className="flex flex-col gap-4 text-lg leading-relaxed text-gray-800">
           <p>
             Somos un equipo de desarrolladores en formación de BYU-Pathway
@@ -36,19 +27,19 @@ export default function About() {
         <h2 className="sr-only">Nuestro Equipo de Desarrollo</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          
+
           {/* --- GINO --- */}
           <article className="flex flex-col items-center text-center gap-3 p-6 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all hover:-translate-y-1">
             <div className="relative w-32 h-32 mb-2">
               {/* ASEGÚRATE DE TENER ESTA FOTO EN TU CARPETA PUBLIC */}
-              <Image 
-                src="/images/gino-pic_11zon.jpg" 
+              <Image
+                src="/images/gino-pic_11zon.jpg"
                 alt="Foto de Gino Rojo"
                 fill
                 className="rounded-full object-cover"
               />
             </div>
-            
+
             <header>
               <h3 className="font-bold text-xl text-gray-800">Gino Rojo</h3>
               <p className="text-gray-800 text-xs font-bold uppercase tracking-wider mt-1">
@@ -65,9 +56,9 @@ export default function About() {
           {/* --- CRISTIAN --- */}
           <article className="flex flex-col items-center text-center gap-3 p-6 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all hover:-translate-y-1">
             <div className="relative w-32 h-32 mb-2">
-               {/* ASEGÚRATE DE TENER ESTA FOTO EN TU CARPETA PUBLIC */}
-              <Image 
-                src="/images/cristian-pic_11zon.jpg" 
+              {/* ASEGÚRATE DE TENER ESTA FOTO EN TU CARPETA PUBLIC */}
+              <Image
+                src="/images/cristian-pic_11zon.jpg"
                 alt="Foto de Cristian De La Hoz"
                 fill
                 className="rounded-full object-cover"
@@ -88,9 +79,9 @@ export default function About() {
           {/* --- DAVID --- */}
           <article className="flex flex-col items-center text-center gap-3 p-6 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all hover:-translate-y-1">
             <div className="relative w-32 h-32 mb-2">
-               {/* ASEGÚRATE DE TENER ESTA FOTO EN TU CARPETA PUBLIC */}
-              <Image 
-                src="/images/david.jpg" 
+              {/* ASEGÚRATE DE TENER ESTA FOTO EN TU CARPETA PUBLIC */}
+              <Image
+                src="/images/david.jpg"
                 alt="Foto de David Balladares"
                 fill
                 className="rounded-full object-cover"
@@ -108,12 +99,12 @@ export default function About() {
             </p>
           </article>
 
-           {/* --- FRANCISCO --- */}
-           <article className="flex flex-col items-center text-center gap-3 p-6 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all hover:-translate-y-1">
+          {/* --- FRANCISCO --- */}
+          <article className="flex flex-col items-center text-center gap-3 p-6 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all hover:-translate-y-1">
             <div className="relative w-32 h-32 mb-2">
-               {/* ASEGÚRATE DE TENER ESTA FOTO EN TU CARPETA PUBLIC */}
-              <Image 
-                src="/images/francisco-pic_11zon.jpeg" 
+              {/* ASEGÚRATE DE TENER ESTA FOTO EN TU CARPETA PUBLIC */}
+              <Image
+                src="/images/francisco-pic_11zon.jpeg"
                 alt="Foto de Francisco"
                 fill
                 className="rounded-full object-cover"

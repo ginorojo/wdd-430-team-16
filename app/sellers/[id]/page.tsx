@@ -3,6 +3,21 @@ import { getSellerWithProducts } from "@/features/sellers/queries";
 import { auth } from "@/auth"; // Import your auth utility
 import NextLink from "next/link";
 import Image from "next/image";
+import { Metadata } from "next";
+
+export async function generateMetadata(props: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const params = await props.params;
+  const seller = await getSellerWithProducts(params.id);
+
+  if (!seller) return { title: "Artesano no encontrado" };
+
+  return {
+    title: `${seller.name} | Perfil de Artesano`,
+    description: seller.bio || `Descubre las creaciones únicas de ${seller.name} en Artisanal Refuge.`,
+  };
+}
 
 export default async function SellerProfilePage(props: {
   params: Promise<{ id: string }>;
@@ -20,13 +35,23 @@ export default async function SellerProfilePage(props: {
     notFound();
   }
 
-  // 3. Logic: If the visitor is the owner of this profile, send them to the dashboard
-  if (session?.user?.email === seller.email) {
-    redirect("/sellers/dashboard");
-  }
+  // 3. Logic: If the visitor is the owner, show an edit button
+  const isOwner = session?.user?.email === seller.email;
 
   return (
     <div className="min-h-screen bg-[#FEFAE0]">
+      {isOwner && (
+        <div className="bg-[#BC6C25] text-white py-3 px-4 text-center font-bold flex items-center justify-center gap-4 shadow-md sticky top-0 z-50">
+          <span>Esta es la vista pública de tu perfil</span>
+          <NextLink
+            href={"/sellers/dashboard" as any}
+            className="bg-white text-[#BC6C25] px-4 py-1 rounded-full text-sm hover:bg-opacity-90 transition-all"
+          >
+            Ir al Panel de Control
+          </NextLink>
+        </div>
+      )}
+
       {/* Hero Banner Section */}
       <div className="relative h-64 md:h-80 w-full">
         <Image
@@ -98,7 +123,7 @@ export default async function SellerProfilePage(props: {
                       ${product.price.toFixed(2)}
                     </p>
                     <NextLink
-                      href={`/product/${product.id}`} // Adjusted to marketplace route
+                      href={`/product/${product.id}` as any} // Adjusted to marketplace route
                       className="mt-auto block w-full text-center py-2 bg-[#BC6C25] text-white rounded-lg text-sm font-medium hover:bg-[#a05b1f] transition-colors"
                     >
                       Ver Detalles

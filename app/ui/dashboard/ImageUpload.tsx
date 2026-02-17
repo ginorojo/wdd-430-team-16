@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import { Upload, ImageIcon, X } from "lucide-react";
+import NextImage from "next/image";
 
 export default function ImageUpload({
   onImageProcessed,
@@ -74,10 +75,11 @@ export default function ImageUpload({
         className="relative h-48 w-full border-2 border-dashed border-[#DDA15E] rounded-xl flex flex-col items-center justify-center bg-white hover:bg-orange-50 cursor-pointer transition-colors overflow-hidden"
       >
         {preview ? (
-          <img
+          <NextImage
             src={preview}
-            className="w-full h-full object-cover"
             alt="Preview"
+            fill
+            className="object-cover"
           />
         ) : (
           <>

@@ -1,13 +1,14 @@
-/**
- * @file dashboard/page.tsx
- * @description Responsive Seller dashboard with adaptive table structure.
- */
-
 import { PrismaClient } from "@prisma/client";
 import ProductRow from "@/app/ui/dashboard/ProductRow";
 import AddProductModal from "@/app/ui/dashboard/AddProductModal";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Panel del Artesano | Artisanal Refuge",
+  description: "Gestiona tus productos, revisa tus ventas y actualiza tu perfil de artesano.",
+};
 
 const prisma = new PrismaClient();
 
@@ -15,7 +16,7 @@ export default async function SellerDashboard() {
   const session = await auth();
 
   if (!session?.user?.email) {
-    redirect("/login");
+    redirect("/login" as any);
   }
 
   const seller = await prisma.seller.findFirst({

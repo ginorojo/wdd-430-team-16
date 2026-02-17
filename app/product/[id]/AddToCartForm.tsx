@@ -6,10 +6,9 @@ import { useRouter } from 'next/navigation';
 
 interface AddToCartFormProps {
   productId: string;
-  styles: Record<string, string>;
 }
 
-export default function AddToCartForm({ productId, styles }: AddToCartFormProps) {
+export default function AddToCartForm({ productId }: AddToCartFormProps) {
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
@@ -32,7 +31,7 @@ export default function AddToCartForm({ productId, styles }: AddToCartFormProps)
     if (result.error) {
       setMessage({ type: 'error', text: result.error });
       if (result.error.includes('iniciar sesión')) {
-        setTimeout(() => router.push('/login'), 2000);
+        setTimeout(() => router.push('/login' as any), 2000);
       }
     } else if (result.success) {
       setMessage({ type: 'success', text: result.message || 'Producto agregado al carrito' });
@@ -46,12 +45,12 @@ export default function AddToCartForm({ productId, styles }: AddToCartFormProps)
     <>
       <div className="flex flex-col gap-4 my-4">
         <div className="flex items-center gap-3">
-          <label className="text-sm font-medium text-gray-700">Cantidad</label>
-          <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+          <label className="text-sm font-medium text-gray-700">Quantity</label>
+          <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden h-9">
             <button
               type="button"
-              className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              aria-label="disminuir"
+              className="px-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold transition-colors disabled:opacity-50 h-full"
+              aria-label="decrease"
               onClick={handleDecrease}
               disabled={loading || quantity <= 1}
             >
@@ -59,17 +58,17 @@ export default function AddToCartForm({ productId, styles }: AddToCartFormProps)
             </button>
             <input
               type="number"
-              className="w-16 text-center py-2 border-x border-gray-300 text-gray-900 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50"
+              className="w-10 text-center border-x border-gray-300 text-sm font-medium focus:outline-none h-full"
               value={quantity}
               onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-              aria-label="cantidad"
+              aria-label="quantity"
               disabled={loading}
               min="1"
             />
             <button
               type="button"
-              className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              aria-label="aumentar"
+              className="px-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold transition-colors disabled:opacity-50 h-full"
+              aria-label="increase"
               onClick={handleIncrease}
               disabled={loading}
             >
@@ -79,21 +78,20 @@ export default function AddToCartForm({ productId, styles }: AddToCartFormProps)
         </div>
       </div>
 
-      <button 
-        className={`${styles.addButton} disabled:opacity-50 disabled:cursor-not-allowed`}
+      <button
+        className="w-full py-3 bg-[#BC6C25] hover:bg-[#a05b1f] text-white rounded-xl font-bold text-sm uppercase tracking-wider transition-all shadow-md active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
         onClick={handleAddToCart}
         disabled={loading}
       >
-        {loading ? 'Agregando...' : 'Añadir al Carrito'}
+        {loading ? 'Adding...' : 'Add to Cart'}
       </button>
 
       {message && (
-        <div 
-          className={`p-3 rounded text-sm mt-3 ${
-            message.type === 'success' 
-              ? 'bg-green-100 text-green-700' 
-              : 'bg-red-100 text-red-700'
-          }`}
+        <div
+          className={`p-3 rounded-lg text-xs mt-3 font-medium ${message.type === 'success'
+            ? 'bg-green-100 text-green-700'
+            : 'bg-red-100 text-red-700'
+            }`}
         >
           {message.text}
         </div>
