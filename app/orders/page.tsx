@@ -4,6 +4,8 @@ import OrdersList from '@/app/ui/orders/OrdersList';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
     title: 'Mis Pedidos | Artisanal Refuge',
     description: 'Historial de tus compras únicas y artesanales',
